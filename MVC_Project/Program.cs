@@ -21,6 +21,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 builder.Services.AddScoped<IAccounts, AccountsService>();
 builder.Services.AddScoped<IProducts, ProductsService>();
+builder.Services.AddScoped<ICategories, CategoriesServices>();
 // End add serivces to the container
 
 var app = builder.Build();
