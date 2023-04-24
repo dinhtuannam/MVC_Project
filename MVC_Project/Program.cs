@@ -20,6 +20,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddScoped<IAccounts, AccountsService>();
+builder.Services.AddScoped<IProducts, ProductsService>();
 // End add serivces to the container
 
 var app = builder.Build();

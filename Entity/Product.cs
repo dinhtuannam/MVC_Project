@@ -7,7 +7,7 @@ namespace Entity
 	{
 		[Key]
 		public int ProductId { get; set; }
-		[MaxLength(50)]
+		[Required,MaxLength(50)]
 		public string Name { get; set; }
 		public string Image { get; set; }
 		public string Description { get; set; }
