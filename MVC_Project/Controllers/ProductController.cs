@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Entity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC_Project.Models;
 using Services;
@@ -41,8 +42,22 @@ namespace MVC_Project.Controllers
 			return View(ViewModel);
 		}
 		public IActionResult Detail(int id)
-		{		
-			return View();
+		{
+			var model = _productService.GetById(id);
+			if (model == null)
+				return NotFound();
+			var productModel = new Product_Detail_VM { 
+				ProductId = model.ProductId,
+				Name = model.Name,	
+				Image = model.Image,
+				Quantity = model.Quantity,
+				Price = model.Price,
+                Description = model.Description,
+                ShortDescription = model.ShortDescription,
+                CategoryID = model.CategoryID,
+                Status = model.Status
+            };
+			return View(productModel);
 		}
 	}
 }

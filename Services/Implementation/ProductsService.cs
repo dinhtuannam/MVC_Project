@@ -15,5 +15,9 @@ namespace Services.Implementation
 		{
 			return _context.Products.ToList();
 		}
-	}
+        public Product GetById(int id)
+        {
+            return _context.Products.Where(x => x.ProductId == id).FirstOrDefault();
+        }
+    }
 }
