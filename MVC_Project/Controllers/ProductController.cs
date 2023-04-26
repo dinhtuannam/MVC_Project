@@ -55,7 +55,8 @@ namespace MVC_Project.Controllers
                 Description = model.Description,
                 ShortDescription = model.ShortDescription,
                 CategoryID = model.CategoryID,
-                Status = model.Status
+                Status = model.Status,
+				Category = model.Category
             };
 			return View(productModel);
 		}

@@ -3,7 +3,7 @@
 	public enum ProductStatus
 	{
 		SoldOut = 0,
-		Sold = 1,
+		InStock = 1,
 		Deleted = -1,
 	}
 }

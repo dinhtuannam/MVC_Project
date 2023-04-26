@@ -1,5 +1,6 @@
 ﻿
 using Entity;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Services.Implementation
@@ -17,7 +18,10 @@ namespace Services.Implementation
 		}
         public Product GetById(int id)
         {
-            return _context.Products.Where(x => x.ProductId == id).FirstOrDefault();
+            return _context.Products.Include(p => p.Category)
+                .FirstOrDefault(m => m.ProductId == id);
+				/*.Where(x => x.ProductId == id)
+				.FirstOrDefault();*/
         }
     }
 }
