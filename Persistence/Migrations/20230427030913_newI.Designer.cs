@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -11,9 +12,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230427030913_newI")]
+    partial class newI
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,11 +115,11 @@ namespace Persistence.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<double>("PricePerProduct")
                         .HasColumnType("float");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -124,7 +127,7 @@ namespace Persistence.Migrations
                     b.Property<double>("Total")
                         .HasColumnType("float");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
@@ -414,15 +417,15 @@ namespace Persistence.Migrations
                         {
                             Id = "ff045d07-be86-4a4e-bfa4-0264ec832c12",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c285feee-f360-41f9-8861-2f8631c25ab4",
+                            ConcurrencyStamp = "e9728bdb-b9c7-4507-bc3d-613975551cea",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "SUPER ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAENfSQ690xoL9WK8f1MXlb9s37i82FnO6R4kWQmTd5jn65UN0aIfze3V5WVrihemkTg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENM1vpzwCcFF6xCQEwSeuIFNuc5UZyN+wb/87LpqDF8uvmkKVd1BtXOQNweVGOyiNw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3942bd93-17ed-4cb3-b453-d750e396b0e6",
+                            SecurityStamp = "674b3f9b-a683-4f0f-995b-e182385fcaed",
                             TwoFactorEnabled = false,
                             UserName = "Super Admin"
                         });

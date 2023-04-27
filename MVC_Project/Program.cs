@@ -1,4 +1,5 @@
 using AspNetCoreHero.ToastNotification;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Services;
@@ -19,9 +20,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddIdentity<IdentityUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+        .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddScoped<IAccounts, AccountsService>();
 builder.Services.AddScoped<IProducts, ProductsService>();
 builder.Services.AddScoped<ICategories, CategoriesServices>();
+builder.Services.AddScoped<IDiscounts, DiscountsService>();
 // End add serivces to the container
 
 var app = builder.Build();

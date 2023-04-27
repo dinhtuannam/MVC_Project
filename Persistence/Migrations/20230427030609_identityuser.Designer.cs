@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -11,9 +12,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230427030609_identityuser")]
+    partial class identityuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,11 +115,11 @@ namespace Persistence.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<double>("PricePerProduct")
                         .HasColumnType("float");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -124,7 +127,7 @@ namespace Persistence.Migrations
                     b.Property<double>("Total")
                         .HasColumnType("float");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
@@ -304,20 +307,6 @@ namespace Persistence.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "2ca8fa08-4a80-4714-a5fb-17b7316fddc4",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "88ac3925-8432-4f60-89e2-96433d08bbcf",
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -408,24 +397,6 @@ namespace Persistence.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "ff045d07-be86-4a4e-bfa4-0264ec832c12",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "c285feee-f360-41f9-8861-2f8631c25ab4",
-                            Email = "admin@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@GMAIL.COM",
-                            NormalizedUserName = "SUPER ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAENfSQ690xoL9WK8f1MXlb9s37i82FnO6R4kWQmTd5jn65UN0aIfze3V5WVrihemkTg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "3942bd93-17ed-4cb3-b453-d750e396b0e6",
-                            TwoFactorEnabled = false,
-                            UserName = "Super Admin"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -488,18 +459,6 @@ namespace Persistence.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "ff045d07-be86-4a4e-bfa4-0264ec832c12",
-                            RoleId = "2ca8fa08-4a80-4714-a5fb-17b7316fddc4"
-                        },
-                        new
-                        {
-                            UserId = "ff045d07-be86-4a4e-bfa4-0264ec832c12",
-                            RoleId = "88ac3925-8432-4f60-89e2-96433d08bbcf"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

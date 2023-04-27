@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Entity
 {
-	[Keyless]
+	
 	public class DetailOrder
 	{
 		[ForeignKey("Order")]

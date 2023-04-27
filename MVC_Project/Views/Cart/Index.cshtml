@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model Cart_Index_VM
+<!DOCTYPE html>
 <html lang="zxx" class="no-js">
 
 <head>
@@ -159,8 +160,8 @@
                                 </td>
                                 <td>
                                     <div class="cupon_text d-flex align-items-center">
-                                        <input type="text" placeholder="Coupon Code">
-                                        <a class="primary-btn" href="#">Apply</a>
+                                        <input type="text" placeholder="Coupon Code" class="border text-dark  text-uppercase" id="discount-input">
+                                        <span class="primary-btn" id="cart-apply-btn" >Apply</span>
                                         <a class="gray_btn" href="#">Close Coupon</a>
                                     </div>
                                 </td>
@@ -203,7 +204,7 @@
                                                 </li>
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Discount: </span>
-                                                    <span>$5.00</span>
+                                                    <span id="cart-discount-price">$@Model.DiscountPrice</span>
                                                 </li>
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Total: </span>
@@ -264,7 +265,6 @@
     var nameInput = document.getElementById('nameInput');
     var addressInput = document.getElementById('addressInput');
     var phoneInput = document.getElementById('phoneInput');
-
     form.addEventListener('submit', function (event) {
         if (nameInput.value.trim() === '') {
             alert('Full Name cannot be empty');
@@ -281,3 +281,36 @@
         }
     });
 </script>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#cart-apply-btn').click(function () {
+                var discountInput = $('#discount-input').val();
+                $.ajax({
+                    type: "GET",
+                    url: "/Discount/GetDiscount",
+                    data: { name: discountInput },
+                    success: function (discountData) {
+                        if(discountData == null){
+                            alert("failed")
+                            return false;
+                        }
+                        else{
+                            alert("success");
+                            // Gán dữ liệu tại đây
+                            $('#cart-discount-price').text(discountData.discountPrice);
+                            $('#cart-discount-price').val(discountData.discountPrice);
+                            console.log(typeof discountData.discountPrice);
+                        }
+                    },
+                    error: function () {
+                        alert("failed")
+                        console.log("Something went wrong!");
+                    }
+                });
+            });
+        });
+       
+    </script>
+}
+
