@@ -1,4 +1,4 @@
-﻿@model Cart_Index_VM
+﻿@model IEnumerable<Cart_Index_VM>
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
 
@@ -64,90 +64,41 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <div class="media">
-                                        <div class="d-flex">
-                                            <img src="img/cart.jpg" alt="">
+                            @foreach(var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="media">
+                                            <div class="d-flex max-height-255 max-width-255">
+                                                <img src="image/Sneaker/@item.Image" alt="" style="height:255px!important; width:255px!important;">
+                                            </div>
+                                            <div class="media-body">
+                                                <p>Minimalistic shop for multipurpose use</p>
+                                            </div>
                                         </div>
-                                        <div class="media-body">
-                                            <p>Minimalistic shop for multipurpose use</p>
+                                    </td>
+                                    <td>
+                                        <h5>@item.Price</h5>
+                                    </td>
+                                    <td>
+                                        <div class="product_count">
+                                            <input type="text" name="qty" id="sst" maxlength="12" value="@item.Quantity" title="Quantity:"
+                                                   class="input-text qty">
+                                            <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                                                    class="increase items-count" type="button">
+                                                <i class="lnr lnr-chevron-up"></i>
+                                            </button>
+                                            <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                                                    class="reduced items-count" type="button">
+                                                <i class="lnr lnr-chevron-down"></i>
+                                            </button>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <h5>$360.00</h5>
-                                </td>
-                                <td>
-                                    <div class="product_count">
-                                        <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
-                                            class="input-text qty">
-                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                            class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                            class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <h5>$720.00</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="media">
-                                        <div class="d-flex">
-                                            <img src="img/cart.jpg" alt="">
-                                        </div>
-                                        <div class="media-body">
-                                            <p>Minimalistic shop for multipurpose use</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <h5>$360.00</h5>
-                                </td>
-                                <td>
-                                    <div class="product_count">
-                                        <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
-                                            class="input-text qty">
-                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                            class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                            class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <h5>$720.00</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="media">
-                                        <div class="d-flex">
-                                            <img src="img/cart.jpg" alt="">
-                                        </div>
-                                        <div class="media-body">
-                                            <p>Minimalistic shop for multipurpose use</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <h5>$360.00</h5>
-                                </td>
-                                <td>
-                                    <div class="product_count">
-                                        <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
-                                            class="input-text qty">
-                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                            class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                            class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <h5>$720.00</h5>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td>
+                                        <h5>@item.Total</h5>
+                                    </td>
+                                </tr>
+                            }
                             <tr class="bottom_button">
                                 <td>
                                     <a class="gray_btn" href="#">Update Cart</a>
@@ -162,7 +113,7 @@
                                     <div class="cupon_text d-flex align-items-center">
                                         <input type="text" placeholder="Coupon Code" class="border text-dark  text-uppercase" id="discount-input">
                                         <span class="primary-btn" id="cart-apply-btn" >Apply</span>
-                                        <a class="gray_btn" href="#">Close Coupon</a>
+                                        <a class="gray_btn" href="#">Cancel</a>
                                     </div>
                                 </td>
                             </tr>
@@ -204,13 +155,13 @@
                                                 </li>
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Discount: </span>
-                                                    <span id="cart-discount-price">$@Model.DiscountPrice</span>
+                                                    <span id="cart-discount-price">$0</span>
                                                 </li>
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Total: </span>
                                                     <span>$3000</span>
                                                 </li>
-                                                
+                                                 
                                             </ul>
                               
                                         </div>
@@ -287,6 +238,7 @@
             $('#cart-apply-btn').click(function () {
                 var discountInput = $('#discount-input').val();
                 $.ajax({
+                   
                     type: "GET",
                     url: "/Discount/GetDiscount",
                     data: { name: discountInput },

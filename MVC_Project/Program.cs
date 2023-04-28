@@ -1,4 +1,5 @@
 using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -12,9 +13,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddNotyf(config =>
 {
-    config.DurationInSeconds = 10;
+    config.DurationInSeconds = 2;
     config.IsDismissable = true;
-    config.Position = NotyfPosition.TopRight;
+    config.Position = NotyfPosition.BottomRight;
 });
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -28,10 +29,11 @@ builder.Services.AddScoped<IAccounts, AccountsService>();
 builder.Services.AddScoped<IProducts, ProductsService>();
 builder.Services.AddScoped<ICategories, CategoriesServices>();
 builder.Services.AddScoped<IDiscounts, DiscountsService>();
+builder.Services.AddSession();
 // End add serivces to the container
 
 var app = builder.Build();
-
+app.UseNotyf();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -46,7 +48,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();

@@ -20,8 +20,6 @@ namespace Services.Implementation
         {
             return _context.Products.Include(p => p.Category)
                 .FirstOrDefault(m => m.ProductId == id);
-				/*.Where(x => x.ProductId == id)
-				.FirstOrDefault();*/
         }
     }
 }
