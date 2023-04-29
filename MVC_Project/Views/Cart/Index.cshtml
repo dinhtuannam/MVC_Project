@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Cart_Index_VM>
+﻿@model Cart_Index_VM
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
 
@@ -64,7 +64,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach(var item in Model)
+                            @foreach(var item in Model.CartItems)
                             {
                                 <tr>
                                     <td>
@@ -78,7 +78,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <h5>@item.Price</h5>
+                                        <h5>@item.PricePerProduct</h5>
                                     </td>
                                     <td>
                                         <div class="product_count">
@@ -101,7 +101,7 @@
                             }
                             <tr class="bottom_button">
                                 <td>
-                                    <a class="gray_btn" href="#">Update Cart</a>
+                                    <a class="gray_btn" asp-controller="Cart" asp-action="Index">Update Cart</a>
                                 </td>
                                 <td>
 
@@ -147,7 +147,7 @@
                                             <ul class="list">
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Sub Total: </span>
-                                                    <span>$3000</span>
+                                                    <span>$@Model.CartTotal</span>
                                                 </li>
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Shipping: </span>
@@ -155,7 +155,7 @@
                                                 </li>
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Discount: </span>
-                                                    <span id="cart-discount-price">$0</span>
+                                                    <span id="cart-discount-price">$@Model.DiscountPrice</span>
                                                 </li>
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Total: </span>

@@ -23,14 +23,14 @@ namespace MVC_Project.Controllers
 			return View(Carts);
 		}
 
-		public List<Cart_Index_VM> Carts
+		public Cart_Index_VM Carts
 		{
 			get
 			{
-				var data = HttpContext.Session.Get<List<Cart_Index_VM>>("GioHang");
+				var data = HttpContext.Session.Get<Cart_Index_VM>("GioHang");
 				if (data == null)
 				{
-					data = new List<Cart_Index_VM>();
+					data = new Cart_Index_VM();
 				}
 				return data;
 			}
@@ -40,20 +40,20 @@ namespace MVC_Project.Controllers
 		public IActionResult AddToCart(int id,int qty)
 		{
 			var myCart = Carts;
-			var item = myCart.SingleOrDefault(p => p.ProductId == id);
+			var item = myCart.CartItems.FirstOrDefault(x => x.ProductId == id);
+			var cart_item = new Cart_item();
 			if (item == null)
 			{
 				var product = _productService.GetById(id);
-				item = new Cart_Index_VM
+				cart_item = new Cart_item
 				{
 					ProductId = id,
 					Name = product.Name,
 					Image = product.Image,
 					Quantity = qty,
-					Price = product.Price,
-					DiscountPrice = 0
+					PricePerProduct = product.Price,
 				};
-				myCart.Add(item);
+				myCart.CartItems.Add(cart_item);
 			}
 			else
 			{
