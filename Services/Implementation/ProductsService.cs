@@ -14,12 +14,22 @@ namespace Services.Implementation
 		}
 		public IEnumerable<Product> GetAll()
 		{
-			return _context.Products.ToList();
+			return _context.Products
+				   .Include(p => p.Category)
+				   .ToList();
 		}
         public Product GetById(int id)
         {
             return _context.Products.Include(p => p.Category)
-                .FirstOrDefault(m => m.ProductId == id);
+                   .FirstOrDefault(m => m.ProductId == id);
+        }
+
+        public IEnumerable<Product> GetByCat(int catID)
+		{
+            return _context.Products
+				   .Where(x => x.CategoryID == catID)
+				   .Include(p => p.Category)
+				   .ToList();
         }
     }
 }
