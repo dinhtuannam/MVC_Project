@@ -7,5 +7,6 @@ namespace Services
 		IEnumerable<Product> GetAll();
 		Product GetById(int id);
         IEnumerable<Product> GetByCat(int catID);
+        Task CreateAsSync(Product product);
     }
 }

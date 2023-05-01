@@ -31,5 +31,11 @@ namespace Services.Implementation
 				   .Include(p => p.Category)
 				   .ToList();
         }
+
+        public async Task CreateAsSync(Product product)
+        {
+			_context.Add(product);
+			await _context.SaveChangesAsync();	
+        }
     }
 }

@@ -41,7 +41,7 @@
                 <div class="col-lg-4 text-right">
                     <button class="btn btn-primary">
                         <i class="anticon anticon-plus-circle m-r-5"></i>
-                        <a asp-area="Admin" asp-controller="AdminProducts" asp-action="Create" class="text-white">Thêm sản phẩm</a>
+                        <a asp-area="Admin" asp-controller="AdminProduct" asp-action="Create" class="text-white">Thêm sản phẩm</a>
                     </button>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                                     <td>@item.Price</td>
                                     <td>@item.Quantity</td>
                                     <td>@item.Status</td>
-                                    <td>@item.UploadDate</td>
+                                    <td>@item.UploadDate?.ToShortDateString()</td>
                                     <td>
                                         <a class="btn btn-primary m-r-5 text-white"
                                             asp-area="Admin"
