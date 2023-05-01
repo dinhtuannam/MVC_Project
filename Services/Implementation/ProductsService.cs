@@ -8,8 +8,7 @@ namespace Services.Implementation
 	public class ProductsService : IProducts
 	{
 		private ApplicationDbContext _context;
-		public ProductsService(ApplicationDbContext context) {
-
+        public ProductsService(ApplicationDbContext context) {
 			_context = context;
 		}
 		public IEnumerable<Product> GetAll()
@@ -36,6 +35,16 @@ namespace Services.Implementation
         {
 			_context.Add(product);
 			await _context.SaveChangesAsync();	
+        }
+
+        public async Task DeleteAsSync(int id)
+        {
+            var product = GetById(id);
+            if (product != null)
+            {
+                _context.Remove(product);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

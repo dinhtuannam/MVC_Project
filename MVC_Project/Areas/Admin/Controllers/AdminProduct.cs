@@ -6,8 +6,9 @@ using MVC_Project.Areas.Admin.Models;
 using Services;
 using PagedList.Core;
 using MVC_Project.Models;
-using Microsoft.AspNetCore.Hosting;
 using MVC_Project.Helper;
+using AspNetCoreHero.ToastNotification.Abstractions;
+using System;
 
 namespace MVC_Project.Areas.Admin.Controllers
 {
@@ -16,12 +17,14 @@ namespace MVC_Project.Areas.Admin.Controllers
 	{
 		private IProducts _productService;
 		private ICategories _categories;
+        private INotyfService _notifyService { get; }
         private IWebHostEnvironment _webHostEnvironment;
-        public AdminProduct(IProducts productService, ICategories categories, IWebHostEnvironment webHostEnvironment)
+        public AdminProduct(IProducts productService, ICategories categories, IWebHostEnvironment webHostEnvironment, INotyfService notifyService)
 		{
 			_productService = productService;
 			_categories = categories;
             _webHostEnvironment = webHostEnvironment;
+            _notifyService = notifyService;
 		}
 
 		public async Task<IActionResult> Index(int page = 1, int CatID = 0)
@@ -149,11 +152,61 @@ namespace MVC_Project.Areas.Admin.Controllers
                     var convert = new ConvertImgToString(_webHostEnvironment);
                     newProduct.Image = convert.ConvertImg(model.Image).Result;
                     await _productService.CreateAsSync(newProduct);
+                    _notifyService.Success("Thêm sản phẩm thành công!");
                     return RedirectToAction("Index");
                 }
 
             }
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            /*var product = _productService.GetById(id);*/
+            if (id != null)
+            {
+                await _productService.DeleteAsSync(id);
+                _notifyService.Success("Xóa sản phẩm thành công");
+                /*var helper = new ConvertImgToString(_webHostEnvironment);
+                helper.DeleteImg(product.Image);*/
+                return Json(new
+                {
+                    status = "success"
+                });
+            }
+            return Json(new
+            {
+                status = "fail"
+            });
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var product = _productService.GetById(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            var model = new Update_Product_VM
+            {
+                ProductId = product.ProductId,
+                Name = product.Name,
+                Description = product.Description,
+                ShortDescription = product.ShortDescription,
+                CategoryID = product.CategoryID,
+                Quantity = product.Quantity,
+                Price = product.Price,
+                Status = product.Status,
+                UploadDate = product.UploadDate
+            };
+            var lstCat = _categories.GetAll().Select(c => new Category_ViewData
+            {
+                CategoryID = c.CategoryID,
+                Name = c.Name
+            });
+            ViewData["CategoriesList"] = new SelectList(lstCat, "CategoryID", "Name");
+            return View(model);
         }
     }
 }

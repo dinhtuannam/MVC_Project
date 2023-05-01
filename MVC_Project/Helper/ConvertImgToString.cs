@@ -7,7 +7,8 @@
 		{
 			this.webHostEnvironment = webHostEnvironment;
 		}
-		public async Task<string> ConvertImg(IFormFile ImageUrl) {
+		public async Task<string> ConvertImg(IFormFile ImageUrl)
+		{
 			var uploadDir = @"image/Sneaker";
 			var fileName = Path.GetFileNameWithoutExtension(ImageUrl.FileName);
 			var extension = Path.GetExtension(ImageUrl.FileName);
@@ -15,7 +16,17 @@
 			fileName = DateTime.UtcNow.ToString("yymmssfff") + fileName + extension;
 			var path = Path.Combine(webRootPath, uploadDir, fileName);
 			await ImageUrl.CopyToAsync(new FileStream(path, FileMode.Create));
-			return "/" + uploadDir + "/" + fileName;
+			return fileName;
 		}
+
+		public void DeleteImg(string ImageUrl)
+		{
+            var uploadDir = @"image/Sneaker";
+            string imagePath = Path.Combine(webHostEnvironment.WebRootPath,uploadDir, ImageUrl);
+            if (System.IO.File.Exists(imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
+        }
 	}
 }

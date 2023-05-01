@@ -8,5 +8,6 @@ namespace Services
 		Product GetById(int id);
         IEnumerable<Product> GetByCat(int catID);
         Task CreateAsSync(Product product);
+        Task DeleteAsSync(int id);
     }
 }

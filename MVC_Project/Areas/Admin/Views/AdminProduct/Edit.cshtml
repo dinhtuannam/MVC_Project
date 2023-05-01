@@ -1,0 +1,77 @@
+﻿@model MVC_Project.Areas.Admin.models.Update_Product_VM
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<h1>Chỉnh sửa sản phẩm</h1>
+    <form method="post" asp-action="Edit" enctype="multipart/form-data">
+        <div>
+            <hr />
+                <dl class="row">
+                <label asp-for="@Model.Name" class="col-sm-2"></label>
+                <dd class="col-sm-10">
+                    <input asp-for="@Model.Name" class="l" />
+                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                </dd>
+
+                <label asp-for="@Model.Description" class="col-sm-2"></label>
+                <dd class="col-sm-10">
+                    <input asp-for="@Model.Description" class="l" />
+                    <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                </dd>
+
+                <label asp-for="@Model.ShortDescription" class="col-sm-2"></label>
+                 <dd class="col-sm-10">
+                    <input asp-for="@Model.ShortDescription" class="l" />
+                    <span asp-validation-for="@Model.ShortDescription" class="text-danger"></span>
+                </dd>
+
+                <label asp-for="@Model.Quantity" class="col-sm-2"></label>
+                <dd class="col-sm-10">
+                    <input asp-for="@Model.Quantity" class="l" />
+                    <span asp-validation-for="@Model.Quantity" class="text-danger"></span>
+                </dd>
+
+                <label asp-for="@Model.Price" class="col-sm-2"></label>
+                <dd class="col-sm-10">
+                    <input asp-for="@Model.Price" class="l" />
+                    <span asp-validation-for="@Model.Price" class="text-danger"></span>
+                </dd>
+
+                <label asp-for="@Model.CategoryID" class="col-sm-2"></label>
+                <dd class="col-sm-10">
+                    <select asp-for="@Model.CategoryID" asp-items="ViewBag.CategoriesList" class="l" style="width: 178.15px;"></select>
+                    <span asp-validation-for="@Model.CategoryID" class="text-danger"></span>
+                </dd>
+
+                <label asp-for="@Model.Status" class="col-sm-2"></label>
+                <dd class="col-sm-10">
+                   <select asp-for="@Model.Status" asp-items="Html.GetEnumSelectList<Entity.Enums.ProductStatus>()" class="l" style="width: 178.15px;"></select>
+                   <span asp-validation-for="@Model.Status" class="text-danger"></span>
+                </dd>
+
+                <label asp-for="@Model.UploadDate" class="col-sm-2"></label>
+                <dd class="col-sm-10">
+                   <input asp-for="@Model.UploadDate" class="" />
+                   <span asp-validation-for="@Model.UploadDate" class="text-danger"></span>
+                </dd>
+
+                <label asp-for="@Model.Image" class="col-sm-2"></label>
+                <dd class="col-sm-10">
+                    <input asp-for="@Model.Image" type="file" value="Upload" />
+                    <span asp-validation-for="@Model.Image" class="text-danger"></span>
+                </dd
+            </dl>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-rounded btn-primary float-left"><i class="fas fa-plus-square" style="margin-right:0.7em"></i>Save</button>
+            <a asp-action="index" class="btn btn-rounded btn-success float-right"><i class="fas fa-caret-square-left" style="margin-right:0.7em"></i>Back</a>
+        </div>
+    </form>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
