@@ -7,9 +7,9 @@
 		{
 			this.webHostEnvironment = webHostEnvironment;
 		}
-		public async Task<string> ConvertImg(IFormFile ImageUrl)
+		public async Task<string> ConvertImg(IFormFile ImageUrl,string folder)
 		{
-			var uploadDir = @"image/Sneaker";
+			var uploadDir = @"image/"+folder;
 			var fileName = Path.GetFileNameWithoutExtension(ImageUrl.FileName);
 			var extension = Path.GetExtension(ImageUrl.FileName);
 			var webRootPath = webHostEnvironment.WebRootPath;

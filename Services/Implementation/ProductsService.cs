@@ -46,5 +46,11 @@ namespace Services.Implementation
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task UpdateAsSync(Product product)
+        {
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -30,6 +30,7 @@ builder.Services.AddScoped<IProducts, ProductsService>();
 builder.Services.AddScoped<ICategories, CategoriesServices>();
 builder.Services.AddScoped<IDiscounts, DiscountsService>();
 builder.Services.AddScoped<IOrders, OrdersService>();
+builder.Services.AddScoped<IBanners, BannerService>();
 builder.Services.AddSession();
 // End add serivces to the container
 

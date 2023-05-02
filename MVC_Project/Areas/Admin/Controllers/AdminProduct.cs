@@ -9,6 +9,7 @@ using MVC_Project.Models;
 using MVC_Project.Helper;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using System;
+using Microsoft.AspNetCore.Hosting;
 
 namespace MVC_Project.Areas.Admin.Controllers
 {
@@ -150,7 +151,7 @@ namespace MVC_Project.Areas.Admin.Controllers
                 if (model.Image != null && model.Image.Length > 0)
                 {
                     var convert = new ConvertImgToString(_webHostEnvironment);
-                    newProduct.Image = convert.ConvertImg(model.Image).Result;
+                    newProduct.Image = convert.ConvertImg(model.Image,"Sneaker").Result;
                     await _productService.CreateAsSync(newProduct);
                     _notifyService.Success("Thêm sản phẩm thành công!");
                     return RedirectToAction("Index");
@@ -207,6 +208,36 @@ namespace MVC_Project.Areas.Admin.Controllers
             });
             ViewData["CategoriesList"] = new SelectList(lstCat, "CategoryID", "Name");
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Update_Product_VM model)
+        {
+            var product = _productService.GetById(model.ProductId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            product.ProductId = model.ProductId;
+            product.Name = model.Name;
+            product.ShortDescription = model.ShortDescription;
+            product.Description = model.Description;
+            product.Price = model.Price;
+            product.Quantity = model.Quantity;
+            product.Status = model.Status;
+            product.CategoryID = model.CategoryID;
+            product.UploadDate = model.UploadDate;
+
+            if (model.Image != null && model.Image.Length > 0)
+            {
+                var helper = new ConvertImgToString(_webHostEnvironment);
+                product.Image = helper.ConvertImg(model.Image,"Sneaker").Result;            
+                await _productService.UpdateAsSync(product);
+                _notifyService.Success("Cập nhật sản phẩm thành công!");
+                return RedirectToAction("Index");
+            }
+            return View();
         }
     }
 }

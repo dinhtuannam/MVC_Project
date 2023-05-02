@@ -1,0 +1,138 @@
+﻿@model IEnumerable<MVC_Project.Areas.Admin.models.Banner_Admin_Index>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Danh sách banner</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                 <a asp-area="Admin"
+                    asp-controller="Home"
+                    asp-action="Index"
+                    class="breadcrumb-item">
+                    <i class="anticon anticon-home m-r-5"></i>
+                    Home
+                </a>
+                <span class="breadcrumb-item active">Danh sách banner </span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row m-b-30">
+                <div class="col-lg-4">
+                    <button class="btn btn-primary">
+                        <i class="anticon anticon-plus-circle m-r-5"></i>
+                        <a asp-area="Admin" asp-controller="AdminBanner" asp-action="Create" class="text-white">Thêm banner</a>
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover e-commerce-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Hình ảnh</th>
+                            <th>Tiêu đề</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>
+                                        <img class="img-fluid rounded"
+                                             src="~/image/Banner/@item.BannerImage"
+                                             style="max-width: 60px"
+                                             alt="" />
+                                    </td>
+                                    <td>
+                                        <h6 class="m-b-0 m-l-10" style="max-width:600px">@item.Title</h6>
+                                    </td>
+
+                                    <td>
+                                        <a class="btn btn-primary m-r-5 text-white"
+                                           asp-area="Admin"
+                                           asp-controller="AdminBanner"
+                                           asp-action="Detail"
+                                           asp-route-id="@item.Id">
+                                            View
+                                        </a>
+                                        <a class="btn btn-secondary m-r-5 text-white"
+                                           asp-area="Admin"
+                                           asp-controller="AdminBanner"
+                                           asp-action="Edit"
+                                           asp-route-id="@item.Id">
+                                            Edit
+                                        </a>
+                                        <button class="btn btn-danger m-r-5 text-white"
+                                                type="button" onclick="showConfirmDialog(@item.Id)">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="confirmModal">
+    <input type="hidden" value="0" id="banner-delete-value" />
+    <div class="modal-dialog" role="document" style="margin-top:140px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận hành động</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc muốn xóa sản phẩm này?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="confirmDelete()">Xóa</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Không</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        // ============================================ Xóa Sản phẩm =========================================
+        const BannerItem = document.getElementById("banner-delete-value")
+        const showConfirmDialog = (id) => {
+            BannerItem.value = id
+            $('#confirmModal').modal('show');
+        }
+        const confirmDelete = () => {
+            $.ajax({
+                type: "GET",
+                url: "/Admin/AdminBanner/Delete",
+                data: { 'id': BannerItem.value },
+                success: function (data) {
+                    if (data.status == "success") {
+                        location.reload();
+                        toast.success('Xóa sản phẩm thành công');
+                    }
+                },
+                error: function () {
+                    alert("failed")
+                    console.log("Something went wrong!");
+                }
+            });
+            $('#confirmModal').modal('hide');
+        }
+        
+    </script>
+}
+
