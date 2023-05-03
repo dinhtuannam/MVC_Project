@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVC_Project.Models;
 
 namespace MVC_Project.Controllers
 {
@@ -6,7 +7,8 @@ namespace MVC_Project.Controllers
 	{
 		public IActionResult Index()
 		{
-			return View();
+			var model = new Login_VM();
+			return View(model);
 		}
 	}
 }
