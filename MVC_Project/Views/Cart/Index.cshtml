@@ -50,94 +50,104 @@
     <!-- End Banner Area -->
 
     <!--================Cart Area =================-->
-    <section class="cart_area">
-        <div class="container">
-            <div class="cart_inner">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Product</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach(var item in Model.CartItems)
-                            {
+    @if (Model.CartItems.Count == 0)
+    {
+        <div style="display:flex; justify-content:center ; margin:40px 0px">
+            <div style="text-align:center;">
+                 <h1>YOUR CART IS EMPTY!</h1>
+                 <a asp-action="Index" asp-controller="Home">SHOPPING NOW</a>
+            </div>
+           
+        </div>
+        
+    }
+    else
+    {
+        <section class="cart_area">
+            <div class="container">
+                <div class="cart_inner">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <div class="media">
-                                            <div class="d-flex max-height-255 max-width-255">
-                                                <img src="image/Sneaker/@item.Image" alt="" style="height:255px!important; width:255px!important;">
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.CartItems)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="media">
+                                                <div class="d-flex max-height-255 max-width-255">
+                                                    <img src="image/Sneaker/@item.Image" alt="" style="height:255px!important; width:255px!important;">
+                                                </div>
+                                                <div class="media-body">
+                                                    <p>Minimalistic shop for multipurpose use</p>
+                                                </div>
                                             </div>
-                                            <div class="media-body">
-                                                <p>Minimalistic shop for multipurpose use</p>
+                                        </td>
+                                        <td>
+                                            <h5>@item.PricePerProduct</h5>
+                                        </td>
+                                        <td>
+                                            <div class="product_count">
+                                                <input type="text" name="qty" id="sst" maxlength="12" value="@item.Quantity" title="Quantity:"
+                                                       class="input-text qty">
+                                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                                                        class="increase items-count" type="button">
+                                                    <i class="lnr lnr-chevron-up"></i>
+                                                </button>
+                                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                                                        class="reduced items-count" type="button">
+                                                    <i class="lnr lnr-chevron-down"></i>
+                                                </button>
                                             </div>
+                                        </td>
+                                        <td>
+                                            <h5>@item.Total</h5>
+                                        </td>
+                                    </tr>
+                                }
+                                <tr class="bottom_button">
+                                    <td>
+                                        <a class="gray_btn" asp-controller="Cart" asp-action="Index">Update Cart</a>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <div class="cupon_text d-flex align-items-center">
+                                            <input type="text" placeholder="Coupon Code" class="border text-dark  text-uppercase" id="discount-input">
+                                            <span class="primary-btn" id="cart-apply-btn">Apply</span>
+                                            <span class="gray_btn" id="cart-cancel-btn" style="cursor:pointer">Cancel</span>
                                         </div>
-                                    </td>
-                                    <td>
-                                        <h5>@item.PricePerProduct</h5>
-                                    </td>
-                                    <td>
-                                        <div class="product_count">
-                                            <input type="text" name="qty" id="sst" maxlength="12" value="@item.Quantity" title="Quantity:"
-                                                   class="input-text qty">
-                                            <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                                    class="increase items-count" type="button">
-                                                <i class="lnr lnr-chevron-up"></i>
-                                            </button>
-                                            <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                                    class="reduced items-count" type="button">
-                                                <i class="lnr lnr-chevron-down"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <h5>@item.Total</h5>
                                     </td>
                                 </tr>
-                            }
-                            <tr class="bottom_button">
-                                <td>
-                                    <a class="gray_btn" asp-controller="Cart" asp-action="Index">Update Cart</a>
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    <div class="cupon_text d-flex align-items-center">
-                                        <input type="text" placeholder="Coupon Code" class="border text-dark  text-uppercase" id="discount-input">
-                                        <span class="primary-btn" id="cart-apply-btn" >Apply</span>
-                                        <a class="gray_btn" href="#">Cancel</a>
-                                    </div>
-                                </td>
-                            </tr>
                                 <form id="cart-input-form">
-                                    <tr class="shipping_area">           
-                                        <td>                                 
-                                            <h1>Information</h1>
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label" >Full Name</label>
-                                                <input type="text" class="form-control" id="nameInput" aria-describedby="emailHelp">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Address</label>
-                                                <input type="text" class="form-control" id="addressInput" aria-describedby="emailHelp">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="exampleInputPassword1" class="form-label">Phone Number</label>
-                                                <input type="text" class="form-control" id="phoneInput">
-                                            </div>                  
-                                        
-                                        </td>
-                                 
+                                <tr class="shipping_area">
                                     <td>
+                                        <h1>Information</h1>
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="nameInput" aria-describedby="emailHelp" asp-for="@Model.Fullname">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1" class="form-label">Address</label>
+                                            <input type="text" class="form-control" id="addressInput" aria-describedby="emailHelp" asp-for="@Model.Address">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleInputPassword1" class="form-label">Phone Number</label>
+                                            <input type="text" class="form-control" id="phoneInput" asp-for="@Model.PhoneNumber">
+                                        </div>
 
+                                    </td>
+
+                                    <td>
                                     </td>
                                     <td>
                                         <h5>Check out</h5>
@@ -147,7 +157,7 @@
                                             <ul class="list">
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Sub Total: </span>
-                                                    <span>$@Model.CartTotal</span>
+                                                    <span>$@Model.CartSubTotal</span>
                                                 </li>
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Shipping: </span>
@@ -159,38 +169,37 @@
                                                 </li>
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Total: </span>
-                                                    <span>$3000</span>
+                                                    <span>$@Model.CartTotal</span>
                                                 </li>
-                                                 
+
                                             </ul>
-                              
+
                                         </div>
                                     </td>
                                 </tr>
-                                    <tr class="out_button_area">
+                                <tr class="out_button_area">
                                     <td>
-
                                     </td>
                                     <td>
-
                                     </td>
                                     <td>
-
                                     </td>
                                     <td>
                                         <div class="checkout_btn_inner d-flex align-items-center">
-                                        <a class="gray_btn p-0 px-3" asp-controller="Product" asp-action="Index">Continue Shopping</a>
+                                            <a class="gray_btn p-0 px-3" asp-controller="Product" asp-action="Index">Continue Shopping</a>
                                             <input type="submit" class="primary-btn" value="Proceed to checkout" />
                                         </div>
                                     </td>
                                 </tr>
                                 </form>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    }
+    
     <!--================End Cart Area =================-->
 
     <script src="js/vendor/jquery-2.2.4.min.js"></script>
@@ -238,25 +247,31 @@
             $('#cart-apply-btn').click(function () {
                 var discountInput = $('#discount-input').val();
                 $.ajax({
-                   
                     type: "GET",
-                    url: "/Discount/GetDiscount",
+                    url: "/Discount/ApplyDiscount",
                     data: { name: discountInput },
-                    success: function (discountData) {
-                        if(discountData == null){
-                            alert("failed")
+                    success: function (data) {
+                        if (data.status == "notfound") {
                             return false;
                         }
                         else{
-                            alert("success");
-                            // Gán dữ liệu tại đây
-                            $('#cart-discount-price').text(discountData.discountPrice);
-                            $('#cart-discount-price').val(discountData.discountPrice);
-                            console.log(typeof discountData.discountPrice);
+                            location.reload();
                         }
                     },
                     error: function () {
-                        alert("failed")
+                        console.log("Something went wrong!");
+                    }
+                });
+            });
+
+            $('#cart-cancel-btn').click(function () {
+                $.ajax({
+                    type: "GET",
+                    url: "/Discount/CancelDiscount",
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function () {
                         console.log("Something went wrong!");
                     }
                 });
