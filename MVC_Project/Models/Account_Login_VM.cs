@@ -2,7 +2,7 @@
 
 namespace MVC_Project.Models
 {
-    public class Login_VM
+    public class Account_Login_VM
     {
         [Required(ErrorMessage = "Username is required")]
         public string Username { get; set; }

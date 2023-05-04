@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -38,16 +42,30 @@
 							<li class="nav-item active"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
 							<li class="nav-item"><a class="nav-link" asp-controller="Product" asp-action="Index">Shop</a></li>
 							<li class="nav-item"><a class="nav-link" asp-controller="Blog" asp-action="Index">Blog</a></li>
-							<li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								   aria-expanded="false">Pages</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" asp-controller="Login" asp-action="Index">Login</a></li>
-									<li class="nav-item"><a class="nav-link" asp-controller="Register" asp-action="Index">Register</a></li>
-									<li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
-								</ul>
-							</li>
+							@if (!SignInManager.IsSignedIn(User))
+							{
+								<li class="nav-item submenu dropdown">
+									<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+									   aria-expanded="false">Pages</a>
+									<ul class="dropdown-menu">
+										<li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login">Login</a></li>
+										<li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Register">Register</a></li>
+										<li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
+									</ul>
+								</li>
+							}
+							
 							<li class="nav-item"><a class="nav-link" asp-controller="Contact" asp-action="Index">Contact</a></li>
+							@if (SignInManager.IsSignedIn(User))
+							{
+								<li class="nav-item submenu dropdown">
+									<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+									   aria-expanded="false">Hello: @User.Identity?.Name</a>
+									<ul class="dropdown-menu">
+										<li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Logout">Log out</a></li>
+									</ul>
+								</li>
+							}
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 							<li class="nav-item"><a asp-controller="Cart" asp-action="Index" class="cart"><span class="ti-bag"></span></a></li>

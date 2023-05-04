@@ -55,7 +55,7 @@
         <div style="display:flex; justify-content:center ; margin:40px 0px">
             <div style="text-align:center;">
                  <h1>YOUR CART IS EMPTY!</h1>
-                 <a asp-action="Index" asp-controller="Home">SHOPPING NOW</a>
+                <a asp-controller ="Product" asp-action="Index">SHOPPING NOW</a>
             </div>
            
         </div>
@@ -128,7 +128,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <form id="cart-input-form">
+                                <form id="cart-input-form" asp-action="Checkout" method="get">
                                 <tr class="shipping_area">
                                     <td>
                                         <h1>Information</h1>
@@ -220,7 +220,7 @@
 
 </html>
 
-<script>
+@*<script>
     var form = document.getElementById('cart-input-form');
     var nameInput = document.getElementById('nameInput');
     var addressInput = document.getElementById('addressInput');
@@ -230,6 +230,7 @@
             alert('Full Name cannot be empty');
             event.preventDefault();
             nameInput.focus();
+            
         } else if (addressInput.value.trim() === '') {
             alert('Address cannot be empty');
             event.preventDefault();
@@ -240,7 +241,7 @@
             phoneInput.focus();
         }
     });
-</script>
+</script>*@
 @section Scripts{
     <script>
         $(document).ready(function () {

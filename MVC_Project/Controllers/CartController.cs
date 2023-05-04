@@ -1,5 +1,6 @@
 ﻿
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC_Project.Helper;
 using MVC_Project.Models;
@@ -10,11 +11,13 @@ namespace MVC_Project.Controllers
 {
 	public class CartController : Controller
 	{
+		private readonly SignInManager<IdentityUser> _signInManager;
 		private IProducts _productService;
 		public INotyfService _notifyService { get; }
-		public CartController(IProducts productService, INotyfService notifyService)
+		public CartController(IProducts productService, SignInManager<IdentityUser> signInManager, INotyfService notifyService)
 		{
 			_productService = productService;
+			_signInManager = signInManager;
 			_notifyService = notifyService;
 		}
 
@@ -65,6 +68,20 @@ namespace MVC_Project.Controllers
 			{
 				status = "success",
 			});
+		}
+
+		[HttpGet]
+		public IActionResult Checkout()
+		{
+			if(!_signInManager.IsSignedIn(User)){
+				_notifyService.Information("You are not logged in to use this service. Please log in ");
+                return RedirectToAction("Index", "Cart");
+            }
+			else
+			{
+				_notifyService.Success("Check out successfully !");
+				return RedirectToAction("Index", "Home");
+			}
 		}
 	}
 }

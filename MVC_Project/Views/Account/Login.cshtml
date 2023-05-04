@@ -1,4 +1,8 @@
-﻿@model Login_VM
+﻿@model Account_Login_VM
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
 
@@ -54,28 +58,44 @@
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="login_box_img">
-						<img class="img-fluid" src="img/login.jpg" alt="">
+						<img class="img-fluid" src="~/img/login.jpg" alt="">
 						<div class="hover">
 							<h4>New to our website?</h4>
 							<p>There are advances being made in science and technology everyday, and a good example of this is the</p>
-							<a class="primary-btn" asp-controller="Register" asp-action="Index">Create an Account</a>
+							<a class="primary-btn" asp-controller="Account" asp-action="Register">Create an Account</a>
 						</div>
 					</div>
 				</div>
 				<div class="col-lg-6">
 					<div class="login_form_inner">
 						<h3>Log in to enter</h3>
-						<form class="row login_form" asp-action="HandleLogin" method="post" id="contactForm" novalidate="novalidate">
+						<form class="row login_form" asp-action="Login" method="post" id="contactForm" novalidate="novalidate">
 							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" asp-for="@Model.Username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+								<input 
+									type="text" 
+									class="form-control" 
+									asp-for="@Model.Username" 
+									id="login-username" 
+									placeholder="Username" 
+									onfocus="this.placeholder = ''" 
+									onblur="this.placeholder = 'Username'"
+								>
 							</div>
 							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" asp-for="@Model.Password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+								<input 
+									type="password" 
+									class="form-control"
+									asp-for="@Model.Password"
+									id="login-password" 
+									placeholder="Password" 
+									onfocus="this.placeholder = ''" 
+									onblur="this.placeholder = 'Password'"
+								>
 							</div>
 							<div class="col-md-12 form-group">
 								<div class="creat_account">
 									<input type="checkbox" id="f-option2" name="selector">
-									<label for="f-option2">Keep me logged in</label>
+									<label for="f-option2">Show password</label>
 								</div>
 							</div>
 							<div class="col-md-12 form-group">
@@ -89,7 +109,7 @@
 		</div>
 	</section>
 	<!--================End Login Box Area =================-->
-	
+
 
 
 	<script src="js/vendor/jquery-2.2.4.min.js"></script>
@@ -106,6 +126,18 @@
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
 	<script src="js/gmaps.min.js"></script>
 	<script src="js/main.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
 </html>
+
+<script>
+	$(document).ready(function () {
+		$("#f-option2").click(function () {
+			if ($("#f-option2").is(":checked"))
+				$("#login-password").attr("type", "text");
+			else 
+				$("#login-password").attr("type", "password");
+		});
+	});
+</script>
