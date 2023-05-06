@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-	public interface IOrders
-	{
-        Task CheckOut(Order order);
+    public interface ICart
+    {
+        Carts GetCarts();
     }
 }

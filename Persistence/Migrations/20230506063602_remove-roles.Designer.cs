@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -11,9 +12,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230506063602_remove-roles")]
+    partial class removeroles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -354,15 +357,15 @@ namespace Persistence.Migrations
                         {
                             Id = "ff045d07-be86-4a4e-bfa4-0264ec832c12",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c4b7da7c-88f2-47ac-a056-bf54c2dbf16d",
+                            ConcurrencyStamp = "4dcaba5c-44b9-4dc8-aece-b5bab1dd2ae2",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "SUPER ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEN4NeKtAFgohKK1IvHVolzRZfi0nL2xglUBR8LubDr7JXEknXerPjoEq6mfArsDMjw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA86dHjLajI7iUYrremXeTUJrC4xwrbjinCt/Y0Bj5g5p2GiQZ26WSprt8c6DR8xAQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f9a53f04-e71a-4ad4-a4e1-2f1878a4efa2",
+                            SecurityStamp = "15da26ca-ff31-4cd2-85b6-0a66dd95c027",
                             TwoFactorEnabled = false,
                             UserName = "Super Admin"
                         });

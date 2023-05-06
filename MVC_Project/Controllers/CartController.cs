@@ -1,5 +1,7 @@
 ﻿
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Entity;
+using Entity.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC_Project.Helper;
@@ -11,14 +13,23 @@ namespace MVC_Project.Controllers
 {
 	public class CartController : Controller
 	{
+		//  ===============  Identity
 		private readonly SignInManager<IdentityUser> _signInManager;
-		private IProducts _productService;
+        private readonly UserManager<IdentityUser> _userManager;
+        //  ===============  Service
+        private IProducts _productService;
+        private IOrders _orderService;
+        //  ===============  Helper
 		public INotyfService _notifyService { get; }
-		public CartController(IProducts productService, SignInManager<IdentityUser> signInManager, INotyfService notifyService)
+    
+		
+		public CartController(IProducts productService,IOrders orderService, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, INotyfService notifyService)
 		{
 			_productService = productService;
 			_signInManager = signInManager;
 			_notifyService = notifyService;
+			_userManager = userManager;
+			_orderService = orderService;
 		}
 
         public IActionResult Index()
@@ -71,16 +82,40 @@ namespace MVC_Project.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Checkout()
+		public async Task<IActionResult> Checkout()
 		{
 			if(!_signInManager.IsSignedIn(User)){
-				_notifyService.Information("You are not logged in to use this service. Please log in ");
+				_notifyService.Information("You are not logged in to use this service. Please log in ");				
                 return RedirectToAction("Index", "Cart");
             }
 			else
 			{
-				_notifyService.Success("Check out successfully !");
-				return RedirectToAction("Index", "Home");
+				List<DetailOrder> DetailOrderModel = new List<DetailOrder>();
+                var _session = new SessionStorage();
+                var CartSession = _session.GetCart(HttpContext);
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+				var CartModel = new Order
+				{
+					AccountId = user.Id,
+					OrderDate = DateTime.Now,
+					DiscountPrice = CartSession.DiscountPrice,
+					Total = CartSession.CartTotal,
+					CustomerName = "abc",
+					Address = "abc",
+					PhoneNumber = "abc",
+					Status = OrderStatus.unconfirmed
+				};
+                foreach (var cartItem in CartSession.CartItems)
+				{
+					var detailOrder = new DetailOrder
+					{
+
+					};
+				}
+                await _orderService.CheckOut(CartModel);
+				_session.DeleteCart(HttpContext);
+                _notifyService.Success("Check out successfully !");
+                return RedirectToAction("Index", "Home");
 			}
 		}
 	}

@@ -11,8 +11,6 @@ namespace Persistence
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-        public DbSet<Accounts> Accounts { get; set; }
-        public DbSet<Role> Roles { get; set; }  
         public DbSet<Product> Products {  get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Discount> Discounts { get; set; }
@@ -24,6 +22,7 @@ namespace Persistence
         {
             base.OnModelCreating(builder);
             builder.Entity<DetailOrder>().HasKey(x => new { x.OrderId, x.ProductId });
+    
             builder.Entity<IdentityUserRole<string>>().HasKey(x => new { x.UserId, x.RoleId });
 
             builder.Entity<IdentityRole>().HasData(
