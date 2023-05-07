@@ -78,6 +78,7 @@ namespace MVC_Project.Controllers
                 Status = model.Status
             };
             myCart.DiscountPrice = discountModel.DiscountPrice;
+            myCart.DiscountId = discountModel.DiscountId;
             HttpContext.Session.Set("GioHang", myCart);
             _notifyService.Success("Apply discount successfully");
             return Json(new
@@ -91,6 +92,7 @@ namespace MVC_Project.Controllers
         {
             var myCart = Carts;
             myCart.DiscountPrice = 0;
+            myCart.DiscountId = null;
             HttpContext.Session.Set("GioHang", myCart);
             _notifyService.Success("Cancel discount successfully");
             return Json(new

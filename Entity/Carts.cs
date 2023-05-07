@@ -17,6 +17,7 @@ namespace Entity
         {
             get { return CartSubTotal + DiscountPrice + 5; }
         }
+        public int? DiscountId { get; set; }
         public double DiscountPrice { get; set; }
         public string Fullname { get; set; }
         public string Address { get; set; }

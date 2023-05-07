@@ -1,4 +1,6 @@
-﻿namespace MVC_Project.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MVC_Project.Models
 {
     public class Cart_Index_VM
     {
@@ -13,11 +15,15 @@
 		}
         public double CartTotal
         {
-            get { return CartSubTotal + DiscountPrice + 5; }
+            get { return CartSubTotal - DiscountPrice + 5; }
         }
+        public int? DiscountId { get; set; }
         public double DiscountPrice { get; set; }
-		public string Fullname { get; set; }
-		public string Address { get; set; }
-		public string PhoneNumber { get; set; }
+        [Required(ErrorMessage = "Customer name cannot be required")]
+        public string Fullname { get; set; }
+        [Required(ErrorMessage = "Address cannot be required")]
+        public string Address { get; set; }
+        [Required(ErrorMessage = "Phone number cannot be required")]
+        public string PhoneNumber { get; set; }
 	}
 }

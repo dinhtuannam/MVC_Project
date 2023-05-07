@@ -23,7 +23,12 @@ namespace MVC_Project.Controllers
 		public INotyfService _notifyService { get; }
     
 		
-		public CartController(IProducts productService,IOrders orderService, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, INotyfService notifyService)
+		public CartController(
+			IProducts productService,
+			IOrders orderService, 
+			SignInManager<IdentityUser> signInManager, 
+			UserManager<IdentityUser> userManager, 
+			INotyfService notifyService)
 		{
 			_productService = productService;
 			_signInManager = signInManager;
@@ -81,28 +86,35 @@ namespace MVC_Project.Controllers
 			});
 		}
 
-		[HttpGet]
-		public async Task<IActionResult> Checkout()
+		[HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Checkout(Cart_Index_VM request)
 		{
-			if(!_signInManager.IsSignedIn(User)){
+            var _session = new SessionStorage();
+            var CartSession = _session.GetCart(HttpContext);
+			if(CartSession.CartItems.Count == 0)
+			{
+                _notifyService.Error("Your cart is empty!");
+                return RedirectToAction("Index", "Home");
+            }
+            if (!_signInManager.IsSignedIn(User)){
 				_notifyService.Information("You are not logged in to use this service. Please log in ");				
                 return RedirectToAction("Index", "Cart");
             }
 			else
 			{
 				List<DetailOrder> DetailOrderModel = new List<DetailOrder>();
-                var _session = new SessionStorage();
-                var CartSession = _session.GetCart(HttpContext);
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
 				var CartModel = new Order
 				{
 					AccountId = user.Id,
 					OrderDate = DateTime.Now,
+					DiscountId = CartSession.DiscountId,
 					DiscountPrice = CartSession.DiscountPrice,
 					Total = CartSession.CartTotal,
-					CustomerName = "abc",
-					Address = "abc",
-					PhoneNumber = "abc",
+					CustomerName = request.Fullname,
+					Address = request.Address,
+					PhoneNumber = request.PhoneNumber,
 					Status = OrderStatus.unconfirmed
 				};
                 var insertOrder = await _orderService.InsertOrder(CartModel);
@@ -124,5 +136,33 @@ namespace MVC_Project.Controllers
                 return RedirectToAction("Index", "Home");
 			}
 		}
-	}
+
+        [HttpGet]
+        public IActionResult DeleteCartItem(int id)
+		{
+            var _session = new SessionStorage();
+            var CartSession = _session.GetCart(HttpContext);
+            var deletedItem = CartSession.CartItems.SingleOrDefault(item => item.ProductId == id);
+			if(deletedItem != null) {
+				CartSession.CartItems.Remove(deletedItem);
+                _notifyService.Success("Deleted successfully !");
+                HttpContext.Session.Set("GioHang", CartSession);
+                return Json(new
+                {
+					errCode = 0,
+                    status = "success",
+                });
+            }
+			else
+			{
+                _notifyService.Error("Deleted fail . Please try again !");
+                return Json(new
+                {
+                    errCode = -1,
+                    status = "fail",
+                });
+            }
+        }
+            
+    }
 }

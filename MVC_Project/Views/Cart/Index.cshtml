@@ -1,4 +1,5 @@
 ﻿@model Cart_Index_VM
+
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
 
@@ -74,6 +75,7 @@
                                     <th scope="col">Price</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Total</th>
+                                    <th scope="col" class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -108,7 +110,19 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <h5>@item.Total</h5>
+                                            <h5>$@item.Total</h5>
+                                        </td>
+                                        <td >
+                                            <div style="display:flex;flex-direction: row-reverse;">
+                                                <button 
+                                                    class="btn btn-danger m-r-5 text-white delete-cart-item-btn"
+                                                    type="button"
+                                                    data-id="@item.ProductId"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                            
                                         </td>
                                     </tr>
                                 }
@@ -121,6 +135,10 @@
                                     <td>
                                     </td>
                                     <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td >
                                         <div class="cupon_text d-flex align-items-center">
                                             <input type="text" placeholder="Coupon Code" class="border text-dark  text-uppercase" id="discount-input">
                                             <span class="primary-btn" id="cart-apply-btn">Apply</span>
@@ -128,29 +146,36 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <form id="cart-input-form" asp-action="Checkout" method="get">
+                                <form id="cart-input-form" asp-action="Checkout" method="post">
+                                    @Html.AntiForgeryToken()
                                 <tr class="shipping_area">
                                     <td>
                                         <h1>Information</h1>
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Full Name</label>
                                             <input type="text" class="form-control" id="nameInput" aria-describedby="emailHelp" asp-for="@Model.Fullname">
+                                            <span asp-validation-for="@Model.Fullname" class="text-danger"></span>
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Address</label>
                                             <input type="text" class="form-control" id="addressInput" aria-describedby="emailHelp" asp-for="@Model.Address">
+                                            <span asp-validation-for="@Model.Address" class="text-danger"></span>
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputPassword1" class="form-label">Phone Number</label>
                                             <input type="text" class="form-control" id="phoneInput" asp-for="@Model.PhoneNumber">
+                                            <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
                                         </div>
 
                                     </td>
 
                                     <td>
                                     </td>
+
                                     <td>
                                         <h5>Check out</h5>
+                                    </td>
+                                    <td>
                                     </td>
                                     <td>
                                         <div class="shipping_box">
@@ -161,7 +186,7 @@
                                                 </li>
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Shipping: </span>
-                                                    <span>$5.00</span>
+                                                    <span>$5</span>
                                                 </li>
                                                 <li class="d-flex justify-content-between ml-3">
                                                     <span class="font-weight-bold text-dark">Discount: </span>
@@ -178,12 +203,11 @@
                                     </td>
                                 </tr>
                                 <tr class="out_button_area">
-                                    <td>
-                                    </td>
-                                    <td>
-                                    </td>
-                                    <td>
-                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td>
                                         <div class="checkout_btn_inner d-flex align-items-center">
                                             <a class="gray_btn p-0 px-3" asp-controller="Product" asp-action="Index">Continue Shopping</a>
@@ -216,11 +240,12 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
     <script src="js/gmaps.min.js"></script>
     <script src="js/main.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 </body>
 
 </html>
-
-@*<script>
+<script>
     var form = document.getElementById('cart-input-form');
     var nameInput = document.getElementById('nameInput');
     var addressInput = document.getElementById('addressInput');
@@ -230,19 +255,24 @@
             alert('Full Name cannot be empty');
             event.preventDefault();
             nameInput.focus();
-            
+            return false;
         } else if (addressInput.value.trim() === '') {
             alert('Address cannot be empty');
             event.preventDefault();
             addressInput.focus();
+            return false;
         } else if (phoneInput.value.trim() === '') {
             alert('Phone Number cannot be empty');
             event.preventDefault();
             phoneInput.focus();
+            return false;
         }
     });
-</script>*@
+</script>
 @section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
         $(document).ready(function () {
             $('#cart-apply-btn').click(function () {
@@ -266,16 +296,34 @@
             });
 
             $('#cart-cancel-btn').click(function () {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Discount/CancelDiscount",
+                        success: function (data) {
+                            location.reload();
+                        },
+                        error: function () {
+                            console.log("Something went wrong!");
+                        }
+                    });
+                              
+            });
+
+            $('.delete-cart-item-btn').click(function () {
+                var deleteId = $(this).data('id');
                 $.ajax({
                     type: "GET",
-                    url: "/Discount/CancelDiscount",
+                    url: "/Cart/DeleteCartItem/" + deleteId,
+                    
                     success: function (data) {
+                        if(data.errCode == 0)
                         location.reload();
                     },
                     error: function () {
                         console.log("Something went wrong!");
                     }
-                });
+                }); 
+
             });
         });
        
