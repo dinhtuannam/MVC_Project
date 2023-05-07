@@ -14,11 +14,33 @@ namespace Services.Implementation
         public OrdersService(ApplicationDbContext context) {
             _context = context;
         }
-        public async Task CheckOut(Order order)
+
+        public async Task InsertDetailOrder(List<DetailOrder> detailOrder)
         {
-            _context.Add(order);
-            await _context.SaveChangesAsync();
-            var id = order.OrderId;
+            try
+            {
+                _context.DetailOrders.AddRange(detailOrder);
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+
+            }
+        }
+
+        public async Task<Order> InsertOrder(Order order)
+        {
+            try
+            {
+                _context.Add(order);
+                await _context.SaveChangesAsync();
+                return order;
+            }
+            catch
+            {
+                return null;
+            }
+            
         }
     }
 }

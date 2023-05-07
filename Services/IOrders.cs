@@ -9,6 +9,7 @@ namespace Services
 {
 	public interface IOrders
 	{
-        Task CheckOut(Order order);
+        Task<Order> InsertOrder(Order order);
+        Task InsertDetailOrder(List<DetailOrder> detailOrder);
     }
 }

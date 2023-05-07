@@ -105,14 +105,20 @@ namespace MVC_Project.Controllers
 					PhoneNumber = "abc",
 					Status = OrderStatus.unconfirmed
 				};
+                var insertOrder = await _orderService.InsertOrder(CartModel);
                 foreach (var cartItem in CartSession.CartItems)
 				{
 					var detailOrder = new DetailOrder
 					{
-
+						OrderId = insertOrder.OrderId,
+						ProductId = cartItem.ProductId,
+						Quantity = cartItem.Quantity,
+						PricePerProduct = cartItem.PricePerProduct,
+						Total = cartItem.Total
 					};
+                    DetailOrderModel.Add(detailOrder);
 				}
-                await _orderService.CheckOut(CartModel);
+				await _orderService.InsertDetailOrder(DetailOrderModel);
 				_session.DeleteCart(HttpContext);
                 _notifyService.Success("Check out successfully !");
                 return RedirectToAction("Index", "Home");
