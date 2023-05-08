@@ -5789,5 +5789,45 @@ label {
   .footer-text a,
   .footer-text i {
     color: #ffba00; }
-
+.history-order-info{
+    margin: 8px 0px;
+    font-size:20px;
+    
+    letter-spacing: 1px;
+}
+.history-info-title {
+    width: 150px;
+    font-weight: 600;
+    opacity: 0.9;
+    letter-spacing: 2px;
+    display: inline-block;
+    color: #fff !important;
+}
+.history-btn-view, .history-btn-delete {
+    padding: 4px 8px;
+    margin-right: 6px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 24px;
+    color: white !important;
+}
+.history-list-item {
+    max-width: 460px;
+    margin: 10px 40px;
+    border: 2px solid #828BB3;
+    padding: 14px;
+    font-weight:600;
+    cursor: pointer;
+    letter-spacing: 1px;
+    background: #828BB3;
+    border-radius: 10px;
+}
+.history-btn-view {
+    border: 1px solid #00779B;
+    background: #00779B;
+}
+.history-btn-delete {
+    border: 1px solid red;
+    background: red;
+}
 /*# sourceMappingURL=main.css.map */

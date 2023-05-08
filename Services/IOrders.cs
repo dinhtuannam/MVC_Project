@@ -11,5 +11,7 @@ namespace Services
 	{
         Task<Order> InsertOrder(Order order);
         Task InsertDetailOrder(List<DetailOrder> detailOrder);
+        IEnumerable<Order> GetById(string id);
+        IEnumerable<DetailOrder> GetDetailById(int id);
     }
 }
