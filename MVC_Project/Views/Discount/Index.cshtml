@@ -1,0 +1,26 @@
+@model List<Discount>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var discount in Model)
+        {
+            <tr>
+                <td>@discount.Code</td>
+                <td>@discount.Amount</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@discount.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@discount.Id">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <a asp-action="Create">Create New</a>

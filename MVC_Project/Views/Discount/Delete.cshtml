@@ -1,0 +1,19 @@
+@model Discount
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Code</h4>
+    <div>@Model.Code</div>
+</div>
+<div>
+    <h4>Amount</h4>
+    <div>@Model.Amount</div>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit">Delete</button>
+    <a asp-action="Index">Back to List</a>
+</form>
