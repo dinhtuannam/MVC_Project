@@ -18,6 +18,8 @@ namespace Persistence
 		public DbSet<Order> Orders { get; set; }
 		public DbSet<DetailOrder> DetailOrders { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseSqlServer("Server=ADMIN\\SQLEXPRESS;Database=dbMvcProject;Trusted_Connection=True;MultipleActiveResultSets=true;trustServerCertificate=true;");
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

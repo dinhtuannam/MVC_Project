@@ -10,5 +10,7 @@ namespace Services
     public interface IDiscounts
     {
         Discount GetByName(string name);
+        IEnumerable<Discount> GetAll();
+        Discount GetById(int id);
     }
 }

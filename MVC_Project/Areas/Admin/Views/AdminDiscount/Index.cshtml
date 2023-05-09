@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Entity.Discount>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2 class="header-title">Danh sách khuyến mãi</h2>
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin"
+               asp-controller="Home"
+               asp-action="Index"
+               class="breadcrumb-item">
+                <i class="anticon anticon-home m-r-5"></i>
+                Home
+            </a>
+            <span class="breadcrumb-item active">Danh sách khuyến mãi </span>
+        </nav>
+    </div>
+</div>
+<div class="row m-b-30">
+    <div class="col-lg-8">
+        <div class="d-md-flex">
+            <div class="m-b-10 m-r-15">
+                <select required
+                        asp-route-CatID="@ViewBag.CurrentCatID"
+                        asp-items="ViewBag.CategoriesList"
+                        class="custom-select"
+                        style="min-width: 220px;"
+                        id="txtCatID" name="txtCatID">
+                    <option value="0" selected>Chọn tất cả</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 text-right">
+        <button class="btn btn-primary">
+            <i class="anticon anticon-plus-circle m-r-5"></i>
+            <a asp-action="Create" class="text-white">Thêm sản phẩm</a>
+        </button>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiscountName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiscountPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                    <a class="btn btn-primary m-r-5 text-white"
+                       asp-action="Details"
+                       asp-route-id="@item.DiscountId">
+                        View
+                    </a>
+                    <a class="btn btn-secondary m-r-5 text-white"
+                       asp-action="Edit"
+                       asp-route-id="@item.DiscountId">
+                        Edit
+                    </a>
+                    <a class="btn btn-danger m-r-5 text-white"
+                        asp-action="Delete" 
+                        asp-route-id="@item.DiscountId"
+                    >
+                        Delete
+                    </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

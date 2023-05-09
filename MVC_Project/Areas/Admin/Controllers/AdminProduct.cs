@@ -8,12 +8,12 @@ using PagedList.Core;
 using MVC_Project.Models;
 using MVC_Project.Helper;
 using AspNetCoreHero.ToastNotification.Abstractions;
-using System;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MVC_Project.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminProduct : Controller
 	{
 		private IProducts _productService;

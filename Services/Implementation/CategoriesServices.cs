@@ -12,7 +12,7 @@ namespace Services.Implementation
 		}
 		public IEnumerable<Category> GetAll()
 		{
-			return _context.Categories.ToList();
+			return _context.Categories.Where(x=>x.Status == "active").ToList();
 		}
 	}
 }

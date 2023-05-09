@@ -1,15 +1,18 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using MVC_Project.Areas.Admin.models;
 using MVC_Project.Helper;
 using Services;
 using Services.Implementation;
+using System.Data;
 
 namespace MVC_Project.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminBanner : Controller
     {
         private IBanners _bannerService;

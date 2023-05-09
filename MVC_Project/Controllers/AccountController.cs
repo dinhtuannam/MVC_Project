@@ -11,6 +11,7 @@ namespace MVC_Project.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+
 		public INotyfService _notifyService { get; }
 		public AccountController(
             UserManager<IdentityUser> userManager,
@@ -85,7 +86,19 @@ namespace MVC_Project.Controllers
                 if (result.Succeeded)
                 {
                     _notifyService.Success("Log in successfully");
-                    return RedirectToAction("Index", "Home");
+                    var user = await _userManager.FindByNameAsync(model.Username);
+                    var roles = await _userManager.GetRolesAsync(user);
+
+                    if (roles.Contains("Admin"))
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    else
+                    {
+                        // Người dùng không thuộc role "Admin"
+                        return RedirectToAction("Index", "Home");
+                    }
+                   
                 }
 
             }
