@@ -16,6 +16,14 @@ namespace Services.Implementation
             _context = context;
         }
 
+        public IEnumerable<Order> GetAll()
+        {
+            return _context.Orders
+                    .Include(o => o.Account)
+                    .OrderByDescending(o => o.OrderDate)
+                    .ToList();
+        }
+
         public IEnumerable<Order> GetById(string id)
         {
             try

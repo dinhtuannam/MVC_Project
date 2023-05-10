@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Entity.Enums;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace Entity
@@ -10,6 +11,6 @@ namespace Entity
 		[MaxLength(50)]
 		public string Name { get; set; }
 		public string? Description { get; set; }
-		public string? Status { get; set; }
+		public CategoryStatus? Status { get; set; }
 	}
 }
