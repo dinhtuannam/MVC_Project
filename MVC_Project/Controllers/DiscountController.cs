@@ -10,95 +10,82 @@ namespace MVC_Project.Controllers
 {
     public class DiscountController : Controller
     {
-        private IDiscounts _discountService;
-        public INotyfService _notifyService { get; }
-        public DiscountController(IDiscounts discountService, INotyfService notifyService)
+        private readonly ApplicationDbContext _context;
+
+        public DiscountController(ApplicationDbContext context)
         {
-            _discountService = discountService;
-            _notifyService = notifyService;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+            var discounts = _context.Discounts.ToList();
+            return View(discounts);
+        }
+
+        public IActionResult Create()
+        {
             return View();
         }
-        [HttpGet]
-        public ActionResult GetDiscount(string name)
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create([Bind("Code,Amount")] Discount discount)
         {
-            var model = _discountService.GetByName(name);
-            if (model == null)
+            if (ModelState.IsValid)
             {
-                return null;
+                _context.Discounts.Add(discount);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
             }
-            var discountModel = new Discount_VM
-            {
-                DiscountId = model.DiscountId,
-                DiscountName = model.DiscountName,
-                DiscountPrice = model.DiscountPrice,
-                Description = model.Description,
-                Status = model.Status
-            };
-            return Json(discountModel);
+            return View(discount);
         }
 
-        public Cart_Index_VM Carts
+        public IActionResult Edit(int id)
         {
-            get
+            var discount = _context.Discounts.Find(id);
+            if (discount == null)
             {
-                var data = HttpContext.Session.Get<Cart_Index_VM>("GioHang");
-                if (data == null)
-                {
-                    data = new Cart_Index_VM();
-                }
-                return data;
+                return NotFound();
             }
+            return View(discount);
         }
 
-        [HttpGet]
-        public IActionResult ApplyDiscount(string? name)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, [Bind("Id,Code,Amount")] Discount discount)
         {
-            if(name == null)
-                return View();
-            var myCart = Carts;
-            var model = _discountService.GetByName(name);
-            if (model == null)
+            if (id != discount.Id)
             {
-                _notifyService.Information("Discount not found");
-                return Json(new
-                {
-                    status = "notfound",
-                });
+                return NotFound();
             }
-            var discountModel = new Discount_VM
+            if (ModelState.IsValid)
             {
-                DiscountId = model.DiscountId,
-                DiscountName = model.DiscountName,
-                DiscountPrice = model.DiscountPrice,
-                Description = model.Description,
-                Status = model.Status
-            };
-            myCart.DiscountPrice = discountModel.DiscountPrice;
-            myCart.DiscountId = discountModel.DiscountId;
-            HttpContext.Session.Set("GioHang", myCart);
-            _notifyService.Success("Apply discount successfully");
-            return Json(new
-            {   
-                status = "success",
-            });
+                _context.Update(discount);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(discount);
         }
 
-        [HttpGet]
-        public IActionResult CancelDiscount()
+        public IActionResult Delete(int id)
         {
-            var myCart = Carts;
-            myCart.DiscountPrice = 0;
-            myCart.DiscountId = null;
-            HttpContext.Session.Set("GioHang", myCart);
-            _notifyService.Success("Cancel discount successfully");
-            return Json(new
+            var discount = _context.Discounts.Find(id);
+            if (discount == null)
             {
-                status = "success",
-            });
+                return NotFound();
+            }
+            return View(discount);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var discount = _context.Discounts.Find(id);
+            _context.Discounts.Remove(discount);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
