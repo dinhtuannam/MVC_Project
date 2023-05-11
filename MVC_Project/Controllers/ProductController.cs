@@ -1,8 +1,11 @@
 ﻿using Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MVC_Project.Areas.Admin.Models;
 using MVC_Project.Models;
+using PagedList.Core;
 using Services;
+using System.Drawing.Printing;
 
 namespace MVC_Project.Controllers
 {
@@ -19,27 +22,30 @@ namespace MVC_Project.Controllers
 			_catService = catService;
 		}
 
-		public IActionResult Index()
+		public IActionResult Index(int page = 1, int CatID = 0 ,string Price = "none",string Sort = "none")
 		{
-			var ProductModel = _productService.GetAll().Select(product => new Product_Home_VM
+			var pageNumber = page;
+			var pageSize = 9;
+			List<Product_Home_VM> ProductModel = new List<Product_Home_VM>();
+			ProductModel = _productService.FilterProduct(CatID,Price,Sort).Select(product => new Product_Home_VM
 			{
 				ProductId = product.ProductId,
 				Name = product.Name,
 				Image = product.Image,
+				CategoryID = product.CategoryID,
+				Category = product.Category,
 				Quantity = product.Quantity,
 				Price = product.Price
-			});
+			}).ToList();
 			var CatModel = _catService.GetAll().Select(cat => new Category_VM
 			{
 				CategoryID = cat.CategoryID,
 				Name = cat.Name
 			});
-			var ViewModel = new Product_Category_VM
-			{
-				Products = ProductModel,
-				Categories = CatModel
-			};
-			return View(ViewModel);
+			ViewData["CategoriesList"] = CatModel;
+			PagedList<Product_Home_VM> models = new PagedList<Product_Home_VM>(ProductModel.AsQueryable(), pageNumber, pageSize);
+			ViewBag.TotalPages = models.TotalItemCount;
+			return View(models);
 		}
 		public IActionResult Detail(int id)
 		{

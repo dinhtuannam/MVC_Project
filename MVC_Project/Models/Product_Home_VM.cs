@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Entity;
+using System.ComponentModel.DataAnnotations;
 
 namespace MVC_Project.Models
 {
@@ -7,7 +8,9 @@ namespace MVC_Project.Models
         public int ProductId { get; set; }
         public string Name { get; set; }
         public string Image { get; set; }
-        public int Quantity { get; set; }
+		public int CategoryID { get; set; }
+		public virtual Category Category { get; set; }
+		public int Quantity { get; set; }
         public double Price { get; set; }
     }
 }
