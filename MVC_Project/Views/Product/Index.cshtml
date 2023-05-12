@@ -53,7 +53,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-xl-3 col-lg-4 col-md-5">
-				<div class="sidebar-filter mt-50">
+				<div class="sidebar-filter mt-50" style="margin-top:0px !important">
 					<div class="top-filter-head">Product Filters</div>
 					<div class="common-filter">
 						<div class="head">Category</div>
@@ -61,7 +61,10 @@
 							<ul>
 								@foreach (var item in ViewData["CategoriesList"] as IEnumerable<Category_VM>)
 								{
-									<li class="filter-list"><input value="@item.CategoryID" class="pixel-radio mt-2" type="radio" id="apple" name="category-radio"><label for="apple">@item.Name</label></li>
+									<li class="filter-list">
+										<input value="@item.CategoryID" class="pixel-radio mt-2" type="radio" id="apple" name="category-radio" @(ViewBag.CatID == item.CategoryID ? "checked" : "")>
+										<label for="apple">@item.Name</label>
+									</li>
 								}
 							</ul>
 						</form>
@@ -70,9 +73,18 @@
 						<div class="head">Price</div>
 						<form action="#">
 							<ul>
-								<li class="filter-list"><input class="pixel-radio" type="radio" id="apple" value="under_100" name="price-radio"><label for="apple">Under 100$</label></li>
-								<li class="filter-list"><input class="pixel-radio" type="radio" id="asus" value="100_to_1000" name="price-radio"><label for="asus">100$ - 1000$</label></li>
-								<li class="filter-list"><input class="pixel-radio" type="radio" id="gionee" value="over_1000" name="price-radio"><label for="gionee">Over 1000$</label></li>
+								<li class="filter-list">
+									<input class="pixel-radio" type="radio" id="apple" value="under_100" name="price-radio" @(ViewBag.Price == "under_100" ? "checked" : "")>
+									<label for="apple">Under 100$</label>
+								</li>
+								<li class="filter-list">
+									<input class="pixel-radio" type="radio" id="asus" value="100_to_1000" name="price-radio" @(ViewBag.Price == "100_to_1000" ? "checked" : "")>
+									<label for="asus">100$ - 1000$</label>
+								</li>
+								<li class="filter-list">
+									<input class="pixel-radio" type="radio" id="gionee" value="over_1000" name="price-radio" @(ViewBag.Price == "over_1000" ? "checked" : "")>
+									<label for="gionee">Over 1000$</label>
+								</li>
 							</ul>
 						</form>
 					</div>
@@ -80,16 +92,30 @@
 						<div class="head">Sort</div>
 						<form action="#">
 							<ul>
-								<li class="filter-list"><input class="pixel-radio" type="radio" id="apple" value="by_title" name="sort-radio"><label for="apple">By title</label></li>
-								<li class="filter-list"><input class="pixel-radio" type="radio" id="asus" value="by_price_asc" name="sort-radio"><label for="asus">By price asc</label></li>
-								<li class="filter-list"><input class="pixel-radio" type="radio" id="gionee" value="by_price_desc" name="sort-radio"><label for="gionee">By price des</label></li>
+								<li class="filter-list">
+									<input class="pixel-radio" type="radio" id="apple" value="by_title" name="sort-radio" @(ViewBag.Sort == "by_title" ? "checked" : "")>
+									<label for="apple">By title</label>
+									</li>
+								<li class="filter-list">
+									<input class="pixel-radio" type="radio" id="asus" value="by_price_asc" name="sort-radio" @(ViewBag.Sort == "by_price_asc" ? "checked" : "")>
+									<label for="asus">By price asc</label>
+								</li>
+								<li class="filter-list">
+									<input class="pixel-radio" type="radio" id="gionee" value="by_price_desc" name="sort-radio" @(ViewBag.Sort == "by_price_desc" ? "checked" : "")>
+									<label for="gionee">By price des</label>
+								</li>
 							</ul>
 						</form>
 					</div>
 					<div class="top-filter-head" style="background:#FF7000!important;cursor:pointer" id="filter-btn">Click to filter products</div>
 				</div>
 			</div>
-			<div class="col-xl-9 col-lg-8 col-md-7">
+
+			<div class="col-xl-9 col-lg-8 col-md-7" id="product-container">
+				<div class="filter-bar d-flex flex-wrap align-items-center justify-content-center" style="height:60px; padding:0px !important">
+
+					<input type="text"/>
+				</div>
 				<section class="lattest-product-area pb-40 category-list">
 					<div class="row">
 						@foreach (var item in Model)
@@ -124,16 +150,39 @@
 						<div aria-label="Page navigation example">
 							<ul class="d-flex">
 								<li class="page-item @(Model.HasPreviousPage ? "" : "disabled")" style="width:80px">
-									<a class="page-link" href="@Url.Action("Index", new {page = Model.PageNumber - 1, CatID = ViewBag.SelectedCat})" style="width:100%">Previous</a>
+									<a 
+										class="page-link" 
+										href="@Url.Action("Index", new {
+											page = Model.PageNumber - 1, CatID = ViewBag.CatID, Price = ViewBag.Price , Sort = ViewBag.Sort 
+										})"
+										style="width:100%"
+									>
+										Previous
+									</a>
 								</li>
 								@for (int i = 1; i <= Model.PageCount; i++)
 								{
 									<li class="page-item @(i == Model.PageNumber ? "active" : "")">
-										<a class="page-link" href="@Url.Action("Index", new {page = i, CatID = ViewBag.SelectedCat})">@i</a>
+										<a 
+											class="page-link" 
+											href="@Url.Action("Index", new {
+												page = i, CatID = ViewBag.CatID, Price = ViewBag.Price , Sort = ViewBag.Sort
+											})"
+										>
+											@i
+										</a>
 									</li>
 								}
 								<li class="page-item @(Model.HasNextPage ? "" : "disabled")" style="width:80px">
-									<a class="page-link" href="@Url.Action("Index", new {page = Model.PageNumber + 1, CatID = ViewBag.SelectedCat})" style="width:100%;">Next</a>
+									<a 
+										class="page-link"
+										href="@Url.Action("Index", new {
+										   page = Model.PageNumber + 1, CatID = ViewBag.CatID, Price = ViewBag.Price , Sort = ViewBag.Sort
+										})"
+										style="width:100%;"
+									>
+										Next
+									</a>
 								</li>
 							</ul>
 						</div>
@@ -367,45 +416,83 @@
 	<script src="js/gmaps.min.js"></script>
 	<script src="js/main.js"></script>
 	<script>
-		let category_input = null;
-		let price_input = null;
-		let sort_input = null;
+		let category_input = "@ViewBag.CatID" ? "@ViewBag.CatID" : null;
+		let price_input = "@ViewBag.Price" ? "@ViewBag.Price" : null;
+		let sort_input = "@ViewBag.Sort" ? "@ViewBag.Sort" : null;
+		var scrollToElement = document.getElementById("product-container");
 		// ========================== Sự kiện category radio ==============================
 		const radioButtonsCat = document.querySelectorAll('input[name="category-radio"]');
 		radioButtonsCat.forEach((radioButtonCat) => {
-			radioButtonCat.addEventListener('change', function () {
+			radioButtonCat.addEventListener('click', function () {
 				if (this.checked) {
-					category_input = this.value;
+					if (this.value === category_input) { // Nếu input radio đã được check rồi
+						category_input = null; // Bỏ check và gán giá trị là null
+						this.checked = false; // Bỏ check input radio
+					} else {
+						category_input = this.value;
+					}
 					console.log(category_input);
 				}
 			});
 		});
+		// ========================== Sự kiện price radio ==============================
 		const radioButtonsPrice = document.querySelectorAll('input[name="price-radio"]');
 		radioButtonsPrice.forEach((radioButtonPrice) => {
-			radioButtonPrice.addEventListener('change', function () {
+			radioButtonPrice.addEventListener('click', function () {
 				if (this.checked) {
-					price_input = this.value;
+					if (this.value === price_input) { 
+						price_input = null; 
+						this.checked = false; 
+					} else {
+						price_input = this.value;
+					}
 					console.log(price_input);
-					// Gửi request đến controller để lọc giá sản phẩm ở đây
 				}
 			});
 		});
+		// ========================== Sự kiện sort radio ==============================
 		const radioButtonsSort = document.querySelectorAll('input[name="sort-radio"]');
 		radioButtonsSort.forEach((radioButtonSort) => {
-			radioButtonSort.addEventListener('change', function () {
+			radioButtonSort.addEventListener('click', function () {
 				if (this.checked) {
-					price_input = this.value;
-					console.log(price_input);
-					// Gửi request đến controller để lọc giá sản phẩm ở đây
+					if (this.value === sort_input) { 
+						sort_input = null; 
+						this.checked = false; 
+					} else {
+						sort_input = this.value;
+					}
+					console.log(sort_input);
 				}
 			});
 		});
+		// ========================== Ajax lọc sản phẩm ==============================
 		const filterBtn = document.getElementById('filter-btn');
 		filterBtn.addEventListener('click', function () {
 			console.log("cat: "+category_input);
 			console.log("price: "+price_input);
 			console.log("sort: " + sort_input);
+			$.ajax({
+				url: "/Product/Filter",
+				datatype: "json",
+				type: "GET",
+				data: {
+					CatID: category_input,
+					Price: price_input,
+					Sort : sort_input
+				},
+				success: function (results) {
+					if (results.status == "success") {
+						window.location.href = results.redirectUrl;
+					}
+				},
+				error: function (xhr) {
+					alert("error");
+				}
+			})
 		});
+		setTimeout(function () {
+			scrollToElement.scrollIntoView();
+		}, 0);
 	</script>
 </body>
 

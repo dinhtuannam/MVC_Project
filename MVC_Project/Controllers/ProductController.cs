@@ -43,9 +43,34 @@ namespace MVC_Project.Controllers
 				Name = cat.Name
 			});
 			ViewData["CategoriesList"] = CatModel;
+			ViewBag.CatID = CatID;
+			ViewBag.Price = Price;
+			ViewBag.Sort = Sort;
 			PagedList<Product_Home_VM> models = new PagedList<Product_Home_VM>(ProductModel.AsQueryable(), pageNumber, pageSize);
-			ViewBag.TotalPages = models.TotalItemCount;
 			return View(models);
+		}
+
+		public IActionResult Filter(int page = 1, int CatID = 0, string Price = "none", string Sort = "none")
+		{
+			var pageNumber = page;
+			var url = $"/Product?page={page}";
+			if (CatID != 0)
+			{
+				url += $"&CatID={CatID}";
+			}
+			if (Price != "none")
+			{
+				url += $"&Price={Price}";
+			}
+			if (Sort != "none")
+			{
+				url += $"&Sort={Sort}";
+			}
+			return Json(new
+			{
+				status = "success",
+				redirectUrl = url,
+			});
 		}
 		public IActionResult Detail(int id)
 		{
