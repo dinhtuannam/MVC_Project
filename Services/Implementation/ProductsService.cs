@@ -16,6 +16,7 @@ namespace Services.Implementation
         {
             return _context.Products
                    .Include(p => p.Category)
+                   .Where(p => p.Status != Entity.Enums.ProductStatus.Deleted)
                    .ToList();
         }
         public Product GetById(int id)
@@ -43,7 +44,7 @@ namespace Services.Implementation
             var product = GetById(id);
             if (product != null)
             {
-                _context.Remove(product);
+                product.Status = Entity.Enums.ProductStatus.Deleted;
                 await _context.SaveChangesAsync();
             }
         }

@@ -1,4 +1,4 @@
-﻿@model Entity.Order
+﻿@model MVC_Project.Areas.Admin.models.Order_update_VM
 
 @{
     ViewData["Title"] = "Edit";
@@ -15,29 +15,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="OrderId" />
             <div class="form-group">
-                <label asp-for="AccountId" class="control-label"></label>
-                <select asp-for="AccountId" class="form-control" asp-items="ViewBag.AccountId"></select>
-                <span asp-validation-for="AccountId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiscountId" class="control-label"></label>
-                <select asp-for="DiscountId" class="form-control" asp-items="ViewBag.DiscountId"></select>
-                <span asp-validation-for="DiscountId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiscountPrice" class="control-label"></label>
-                <input asp-for="DiscountPrice" class="form-control" />
-                <span asp-validation-for="DiscountPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="OrderDate" class="control-label"></label>
                 <input asp-for="OrderDate" class="form-control" />
                 <span asp-validation-for="OrderDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CustomerName" class="control-label"></label>
@@ -56,8 +36,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>
+                <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<Entity.Enums.OrderStatus>()"></select>
+                <span asp-validation-for="Status"  class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

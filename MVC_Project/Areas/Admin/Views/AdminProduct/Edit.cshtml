@@ -17,13 +17,13 @@
 
                 <label asp-for="@Model.Description" class="col-sm-2"></label>
                 <dd class="col-sm-10">
-                    <input asp-for="@Model.Description" class="l" />
+                    <textarea asp-for="@Model.Description" rows="8" cols="50" ></textarea>
                     <span asp-validation-for="@Model.Description" class="text-danger"></span>
                 </dd>
 
                 <label asp-for="@Model.ShortDescription" class="col-sm-2"></label>
                  <dd class="col-sm-10">
-                    <input asp-for="@Model.ShortDescription" class="l" />
+                    <textarea asp-for="@Model.ShortDescription"  rows="8" cols="50" ></textarea>
                     <span asp-validation-for="@Model.ShortDescription" class="text-danger"></span>
                 </dd>
 

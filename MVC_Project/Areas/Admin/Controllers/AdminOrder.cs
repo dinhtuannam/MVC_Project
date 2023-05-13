@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Entity;
 using Persistence;
 using Services;
+using MVC_Project.Areas.Admin.models;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace MVC_Project.Areas.Admin.Controllers
 {
@@ -16,11 +18,12 @@ namespace MVC_Project.Areas.Admin.Controllers
     {
         private readonly IOrders _orderService;
         private readonly ApplicationDbContext _context;
-
-        public AdminOrder(ApplicationDbContext context, IOrders orderService)
+        private INotyfService _notifyService { get; }
+        public AdminOrder(ApplicationDbContext context, IOrders orderService, INotyfService notifyService)
         {
             _context = context;
             _orderService = orderService;
+            _notifyService = notifyService;
         }
 
         // GET: Admin/AdminOrder
@@ -31,17 +34,14 @@ namespace MVC_Project.Areas.Admin.Controllers
         }
 
         // GET: Admin/AdminOrder/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null || _context.Orders == null)
             {
                 return NotFound();
             }
 
-            var order = await _context.Orders
-                .Include(o => o.Account)
-                .Include(o => o.Discounts)
-                .FirstOrDefaultAsync(m => m.OrderId == id);
+            var order = _orderService.GetDetailById(id);
             if (order == null)
             {
                 return NotFound();
@@ -85,13 +85,20 @@ namespace MVC_Project.Areas.Admin.Controllers
             }
 
             var order = await _context.Orders.FindAsync(id);
+            var model = new Order_update_VM
+            {
+                OrderId = order.OrderId,
+                CustomerName = order.CustomerName,
+                Address = order.Address,
+                PhoneNumber = order.PhoneNumber,
+                Status = order.Status,
+                OrderDate = order.OrderDate
+            };
             if (order == null)
             {
                 return NotFound();
             }
-            ViewData["AccountId"] = new SelectList(_context.Users, "Id", "Id", order.AccountId);
-            ViewData["DiscountId"] = new SelectList(_context.Discounts, "DiscountId", "DiscountName", order.DiscountId);
-            return View(order);
+            return View(model);
         }
 
         // POST: Admin/AdminOrder/Edit/5
@@ -99,10 +106,11 @@ namespace MVC_Project.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderId,AccountId,DiscountId,DiscountPrice,OrderDate,Total,CustomerName,Address,PhoneNumber,Status")] Order order)
+        public async Task<IActionResult> Edit(int id,Order_update_VM order)
         {
             if (id != order.OrderId)
             {
+                _notifyService.Error("Không tìm thấy đơn hàng");
                 return NotFound();
             }
 
@@ -110,24 +118,25 @@ namespace MVC_Project.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(order);
-                    await _context.SaveChangesAsync();
+                    var updateModel = new Order
+                    {
+                        OrderId = order.OrderId,
+                        CustomerName = order.CustomerName,
+                        Address = order.Address,
+                        PhoneNumber = order.PhoneNumber,
+                        Status = order.Status,
+                        OrderDate = order.OrderDate
+                    };
+                    await _orderService.UpdateAsSync(updateModel);
+                    _notifyService.Success("Cập nhật đơn hàng thành công");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.OrderId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    _notifyService.Error("Cập nhật đơn hàng thất bại");
+                    return NotFound();
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AccountId"] = new SelectList(_context.Users, "Id", "Id", order.AccountId);
-            ViewData["DiscountId"] = new SelectList(_context.Discounts, "DiscountId", "DiscountName", order.DiscountId);
             return View(order);
         }
 
@@ -160,13 +169,7 @@ namespace MVC_Project.Areas.Admin.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Orders'  is null.");
             }
-            var order = await _context.Orders.FindAsync(id);
-            if (order != null)
-            {
-                _context.Orders.Remove(order);
-            }
-            
-            await _context.SaveChangesAsync();
+            await _orderService.DeleteAsSync(id);
             return RedirectToAction(nameof(Index));
         }
 
