@@ -94,15 +94,15 @@
 							<ul>
 								<li class="filter-list">
 									<input class="pixel-radio" type="radio" id="apple" value="by_title" name="sort-radio" @(ViewBag.Sort == "by_title" ? "checked" : "")>
-									<label for="apple">By title</label>
+									<label for="apple">Title A - Z</label>
 									</li>
 								<li class="filter-list">
 									<input class="pixel-radio" type="radio" id="asus" value="by_price_asc" name="sort-radio" @(ViewBag.Sort == "by_price_asc" ? "checked" : "")>
-									<label for="asus">By price asc</label>
+									<label for="asus">Price Low to High</label>
 								</li>
 								<li class="filter-list">
 									<input class="pixel-radio" type="radio" id="gionee" value="by_price_desc" name="sort-radio" @(ViewBag.Sort == "by_price_desc" ? "checked" : "")>
-									<label for="gionee">By price des</label>
+									<label for="gionee">Price High to Low</label>
 								</li>
 							</ul>
 						</form>
@@ -112,9 +112,10 @@
 			</div>
 
 			<div class="col-xl-9 col-lg-8 col-md-7" id="product-container">
-				<div class="filter-bar d-flex flex-wrap align-items-center justify-content-center" style="height:60px; padding:0px !important">
-
-					<input type="text"/>
+				<div class="filter-bar d-flex flex-wrap align-items-center" style="height:60px;flex-direction:row-reverse; padding:0px 8px !important">
+					<button class="search" style="border:none"><span class="lnr lnr-magnifier" id="search"></span></button>
+					<input type="text" id="search-input" class="w-25" style="outline:none;color:#000;font-size:18px" value="@ViewBag.Search"/>
+					
 				</div>
 				<section class="lattest-product-area pb-40 category-list">
 					<div class="row">
@@ -153,7 +154,7 @@
 									<a 
 										class="page-link" 
 										href="@Url.Action("Index", new {
-											page = Model.PageNumber - 1, CatID = ViewBag.CatID, Price = ViewBag.Price , Sort = ViewBag.Sort 
+											page = Model.PageNumber - 1, CatID = ViewBag.CatID, Price = ViewBag.Price , Sort = ViewBag.Sort , search = ViewBag.Search
 										})"
 										style="width:100%"
 									>
@@ -166,7 +167,7 @@
 										<a 
 											class="page-link" 
 											href="@Url.Action("Index", new {
-												page = i, CatID = ViewBag.CatID, Price = ViewBag.Price , Sort = ViewBag.Sort
+												page = i, CatID = ViewBag.CatID, Price = ViewBag.Price , Sort = ViewBag.Sort ,search = ViewBag.Search
 											})"
 										>
 											@i
@@ -176,8 +177,8 @@
 								<li class="page-item @(Model.HasNextPage ? "" : "disabled")" style="width:80px">
 									<a 
 										class="page-link"
-										href="@Url.Action("Index", new {
-										   page = Model.PageNumber + 1, CatID = ViewBag.CatID, Price = ViewBag.Price , Sort = ViewBag.Sort
+									   href="@Url.Action("Index", new {
+										   page = Model.PageNumber + 1, CatID = ViewBag.CatID, Price = ViewBag.Price , Sort = ViewBag.Sort, search = ViewBag.Search
 										})"
 										style="width:100%;"
 									>
@@ -419,6 +420,7 @@
 		let category_input = "@ViewBag.CatID" ? "@ViewBag.CatID" : null;
 		let price_input = "@ViewBag.Price" ? "@ViewBag.Price" : null;
 		let sort_input = "@ViewBag.Sort" ? "@ViewBag.Sort" : null;
+		var input_element = document.getElementById("search-input");
 		var scrollToElement = document.getElementById("product-container");
 		// ========================== Sự kiện category radio ==============================
 		const radioButtonsCat = document.querySelectorAll('input[name="category-radio"]');
@@ -489,6 +491,31 @@
 					alert("error");
 				}
 			})
+		});
+		// ==================== Tìm kiếm sản phẩm ===================
+		input_element.addEventListener("keypress", function (event) {
+			if (event.key === "Enter") {
+				console.log("Search term: " + input_element.value);
+				$.ajax({
+					url: "/Product/Filter",
+					datatype: "json",
+					type: "GET",
+					data: {
+						CatID: category_input,
+						Price: price_input,
+						Sort : sort_input,
+						search : input_element.value
+					},
+					success: function (results) {
+						if (results.status == "success") {
+							window.location.href = results.redirectUrl;
+						}
+					},
+					error: function (xhr) {
+						alert("error");
+					}
+				})
+			}
 		});
 		setTimeout(function () {
 			scrollToElement.scrollIntoView();

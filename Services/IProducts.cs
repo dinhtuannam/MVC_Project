@@ -10,6 +10,6 @@ namespace Services
         Task CreateAsSync(Product product);
         Task DeleteAsSync(int id);
         Task UpdateAsSync(Product product);
-		IEnumerable<Product> FilterProduct(int CatID,string Price, string Sort);
+		IEnumerable<Product> FilterProduct(int CatID,string Price, string Sort,string search);
     }
 }

@@ -2,6 +2,7 @@
 using Entity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using System.Linq;
 
 namespace Services.Implementation
 {
@@ -53,7 +54,7 @@ namespace Services.Implementation
             await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<Product> FilterProduct(int CatID, string Price, string Sort)
+        public IEnumerable<Product> FilterProduct(int CatID, string Price, string Sort,string search)
 		{
 			var products = _context.Products.AsQueryable();
             if (CatID != 0)
@@ -94,6 +95,10 @@ namespace Services.Implementation
 						break;
 				}
 			}		
+            if(search != "")
+            {
+                products = products.Where(p => p.Name.ToLower().Contains(search.ToLower()));
+			}
 			return products.ToList();
         }
     }

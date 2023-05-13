@@ -88,25 +88,18 @@
                                                     <img src="image/Sneaker/@item.Image" alt="" style="height:255px!important; width:255px!important;">
                                                 </div>
                                                 <div class="media-body">
-                                                    <p>Minimalistic shop for multipurpose use</p>
+                                                    <p style="color:#000 !important; font-weight:500">@item.Name</p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
                                             <h5>@item.PricePerProduct</h5>
                                         </td>
-                                        <td>
+                                        <td style="text-align:center">
                                             <div class="product_count">
-                                                <input type="text" name="qty" id="sst" maxlength="12" value="@item.Quantity" title="Quantity:"
-                                                       class="input-text qty">
-                                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                                        class="increase items-count" type="button">
-                                                    <i class="lnr lnr-chevron-up"></i>
-                                                </button>
-                                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                                        class="reduced items-count" type="button">
-                                                    <i class="lnr lnr-chevron-down"></i>
-                                                </button>
+                                                <span type="text" style="margin-right:18px;color:#000 !important; font-weight:500"
+                                                      class="input-text qty">@item.Quantity</span>
+                                                
                                             </div>
                                         </td>
                                         <td>

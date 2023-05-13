@@ -22,12 +22,12 @@ namespace MVC_Project.Controllers
 			_catService = catService;
 		}
 
-		public IActionResult Index(int page = 1, int CatID = 0 ,string Price = "none",string Sort = "none")
+		public IActionResult Index(int page = 1, int CatID = 0 ,string Price = "none",string Sort = "none", string search = "")
 		{
 			var pageNumber = page;
 			var pageSize = 9;
 			List<Product_Home_VM> ProductModel = new List<Product_Home_VM>();
-			ProductModel = _productService.FilterProduct(CatID,Price,Sort).Select(product => new Product_Home_VM
+			ProductModel = _productService.FilterProduct(CatID,Price,Sort,search).Select(product => new Product_Home_VM
 			{
 				ProductId = product.ProductId,
 				Name = product.Name,
@@ -46,11 +46,12 @@ namespace MVC_Project.Controllers
 			ViewBag.CatID = CatID;
 			ViewBag.Price = Price;
 			ViewBag.Sort = Sort;
+			ViewBag.Search = search;
 			PagedList<Product_Home_VM> models = new PagedList<Product_Home_VM>(ProductModel.AsQueryable(), pageNumber, pageSize);
 			return View(models);
 		}
 
-		public IActionResult Filter(int page = 1, int CatID = 0, string Price = "none", string Sort = "none")
+		public IActionResult Filter(int page = 1, int CatID = 0, string Price = "none", string Sort = "none",string search = "")
 		{
 			var pageNumber = page;
 			var url = $"/Product?page={page}";
@@ -65,6 +66,10 @@ namespace MVC_Project.Controllers
 			if (Sort != "none")
 			{
 				url += $"&Sort={Sort}";
+			}
+			if (search != "")
+			{
+				url += $"&search={search}";
 			}
 			return Json(new
 			{
