@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MVC_Project.Areas.Admin.models.Banner_Admin_Index>
+﻿@model IEnumerable<MVC_Project.Areas.Admin.models.Account_Index_VM>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
@@ -6,27 +6,41 @@
 
 <div class="main-content">
     <div class="page-header">
-        <h2 class="header-title">Danh sách banner</h2>
+        <h2 class="header-title">Danh sách sản phẩm</h2>
         <div class="header-sub-title">
             <nav class="breadcrumb breadcrumb-dash">
-                 <a asp-area="Admin"
-                    asp-controller="Home"
-                    asp-action="Index"
-                    class="breadcrumb-item">
+                <a asp-area="Admin"
+                   asp-controller="Home"
+                   asp-action="Index"
+                   class="breadcrumb-item">
                     <i class="anticon anticon-home m-r-5"></i>
                     Home
                 </a>
-                <span class="breadcrumb-item active">Danh sách banner </span>
+                <span class="breadcrumb-item active">Danh sách tài khoản </span>
             </nav>
         </div>
     </div>
     <div class="card">
         <div class="card-body">
             <div class="row m-b-30">
-                <div class="col-lg-4">
+                <div class="col-lg-8">
+                    <div class="d-md-flex">
+                        <div class="m-b-10 m-r-15">
+                            <select required
+                                    asp-route-CatID="@ViewBag.CurrentCatID"
+                                    asp-items="ViewBag.CategoriesList"
+                                    class="custom-select"
+                                    style="min-width: 220px;"
+                                    id="txtCatID" name="txtCatID">
+                                <option value="0" selected>Chọn tất cả</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-right">
                     <button class="btn btn-primary">
                         <i class="anticon anticon-plus-circle m-r-5"></i>
-                        <a asp-area="Admin" asp-controller="AdminBanner" asp-action="Create" class="text-white">Thêm banner</a>
+                        <a asp-area="Admin" asp-controller="AdminProduct" asp-action="Create" class="text-white">Thêm tài khoản</a>
                     </button>
                 </div>
             </div>
@@ -35,8 +49,10 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Hình ảnh</th>
-                            <th>Tiêu đề</th>
+                            <th>Username</th>
+                            <th>Hash Password</th>
+                            <th>Email</th>
+                            <th>Phone</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -46,28 +62,25 @@
                             foreach (var item in Model)
                             {
                                 <tr>
-                                    <td>@item.Id</td>
+                                    <td>@item.Id.Substring(0, 16)...</td>
                                     <td>
-                                        <img class="img-fluid rounded"
-                                             src="~/image/Banner/@item.BannerImage"
-                                             style="max-width: 60px"
-                                             alt="" />
-                                    </td>
+                                        @item.UserName
                                     <td>
-                                        <h6 class="m-b-0 m-l-10" style="max-width:600px">@item.Title</h6>
+                                        <h6 class="m-b-0 m-l-10">@item.Password.Substring(0, 14)...</h6>
                                     </td>
-
+                                    <td>@item.Email</td>
+                                    <td>@item.PhoneNumber</td>
                                     <td>
                                         <a class="btn btn-primary m-r-5 text-white"
                                            asp-area="Admin"
-                                           asp-controller="AdminBanner"
+                                           asp-controller="AdminAccount"
                                            asp-action="Details"
                                            asp-route-id="@item.Id">
                                             View
                                         </a>
                                         <a class="btn btn-secondary m-r-5 text-white"
                                            asp-area="Admin"
-                                           asp-controller="AdminBanner"
+                                           asp-controller="AdminAccount"
                                            asp-action="Edit"
                                            asp-route-id="@item.Id">
                                             Edit
@@ -82,12 +95,21 @@
                         }
                     </tbody>
                 </table>
+                <div aria-label="Page navigation example">
+                    <ul class="pagination">
+                        @*<pager class="pager-container"
+                               list="@Model"
+                               asp-area="Admin"
+                               asp-controller="AdminProduct"
+                               asp-action="Index" />*@
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <div class="modal" tabindex="-1" role="dialog" id="confirmModal">
-    <input type="hidden" value="0" id="banner-delete-value" />
+    <input type="hidden" value="0" id="product-delete-value" />
     <div class="modal-dialog" role="document" style="margin-top:140px">
         <div class="modal-content">
             <div class="modal-header">
@@ -106,33 +128,3 @@
         </div>
     </div>
 </div>
-@section Scripts{
-    <script>
-        // ============================================ Xóa Sản phẩm =========================================
-        const BannerItem = document.getElementById("banner-delete-value")
-        const showConfirmDialog = (id) => {
-            BannerItem.value = id
-            $('#confirmModal').modal('show');
-        }
-        const confirmDelete = () => {
-            $.ajax({
-                type: "GET",
-                url: "/Admin/AdminBanner/Delete",
-                data: { 'id': BannerItem.value },
-                success: function (data) {
-                    if (data.status == "success") {
-                        location.reload();
-                        toast.success('Xóa sản phẩm thành công');
-                    }
-                },
-                error: function () {
-                    alert("failed")
-                    console.log("Something went wrong!");
-                }
-            });
-            $('#confirmModal').modal('hide');
-        }
-        
-    </script>
-}
-

@@ -1,4 +1,6 @@
-﻿namespace MVC_Project.Helper
+﻿using Microsoft.AspNetCore.Hosting;
+
+namespace MVC_Project.Helper
 {
 	public class ConvertImgToString
 	{
@@ -19,14 +21,21 @@
 			return fileName;
 		}
 
-		public void DeleteImg(string ImageUrl)
+		public bool DeleteImg(string ImageUrl,string folder)
 		{
-            var uploadDir = @"image/Sneaker";
-            string imagePath = Path.Combine(webHostEnvironment.WebRootPath,uploadDir, ImageUrl);
-            if (System.IO.File.Exists(imagePath))
+            string filePath = Path.Combine(webHostEnvironment.WebRootPath, "image", folder, ImageUrl);
+				
+            if (System.IO.File.Exists(filePath))
             {
-                System.IO.File.Delete(imagePath);
-            }
+				using (var stream = new FileStream(filePath, FileMode.Open))
+				{
+					stream.Close();
+					System.IO.File.Delete(filePath);
+					return true;
+				}
+			}
+
+			return false;
         }
 	}
 }

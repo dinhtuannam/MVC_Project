@@ -40,7 +40,10 @@ namespace MVC_Project.Areas.Admin.Controllers
         // GET: AdminBanner/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var model = _bannerService.GetById(id);
+            if (model == null)
+                return NotFound();
+            return View(model);
         }
 
         // GET: AdminBanner/Create
@@ -81,7 +84,10 @@ namespace MVC_Project.Areas.Admin.Controllers
         // GET: AdminBanner/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var model = _bannerService.GetById(id);
+            if (model == null)
+                return NotFound();
+            return View(model);
         }
 
         // POST: AdminBanner/Edit/5
@@ -107,8 +113,8 @@ namespace MVC_Project.Areas.Admin.Controllers
             {
                 if (id != null)
                 {
-                    await _bannerService.DeleteAsSync(id);
-                    _notifyService.Success("Xóa sản phẩm thành công");
+					await _bannerService.DeleteAsSync(id);                 
+                    _notifyService.Success("Xóa banner thành công");
                     return Json(new
                     {
                         status = "success"

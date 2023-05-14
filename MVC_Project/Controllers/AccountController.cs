@@ -47,12 +47,17 @@ namespace MVC_Project.Controllers
                 var user = new IdentityUser
                 {
                     UserName = model.Username,
-                    Email = "abc@gmail.com"
+                    Email = model.Email,
+                    PhoneNumber = model.Phone
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    var newUser = await _userManager.FindByEmailAsync(model.Email);
+                
+				    await _userManager.AddToRoleAsync(newUser, "Customer");
+				    _notifyService.Success("Successful account registration");
+                    return RedirectToAction("Login", "Account");
                 }
                 else
                 {
@@ -88,7 +93,7 @@ namespace MVC_Project.Controllers
                     _notifyService.Success("Log in successfully");
                     var user = await _userManager.FindByNameAsync(model.Username);
                     var roles = await _userManager.GetRolesAsync(user);
-
+ 
                     if (roles.Contains("Admin"))
                     {
                         return RedirectToAction("Index", "Admin");

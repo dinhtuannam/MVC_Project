@@ -94,6 +94,36 @@
 								>
 							</div>
 							<div class="col-md-12 form-group">
+								<input type="password"
+									class="form-control"
+									id="confirm-password"
+									placeholder="Confirm Password"
+									onfocus="this.placeholder = ''"
+									onblur="this.placeholder = 'Confirm Password'">
+							</div>
+							<div class="col-md-12 form-group">
+								<input 
+									type="email" 
+									class="form-control"
+									id="register-password"
+									asp-for="@Model.Email"
+									placeholder="Email"
+									onfocus="this.placeholder = ''" 
+									onblur="this.placeholder = 'Email'"
+								>
+							</div>
+							<div class="col-md-12 form-group">
+								<input 
+									type="text" 
+									class="form-control"
+									id="register-password"
+									asp-for="@Model.Phone"
+									placeholder="Phone number" 
+									onfocus="this.placeholder = ''" 
+									onblur="this.placeholder = 'Phone number'"
+								>
+							</div>
+							<div class="col-md-12 form-group">
 								<div class="creat_account">
 									<input type="checkbox" id="f-option2" name="selector">
 									<label for="f-option2">Show password</label>
@@ -136,10 +166,15 @@
 	$(document).ready(function () {		
 		$("#f-option2").click(function () {
 			console.log("abc");
-			if ($("#f-option2").is(":checked")) 
+			if ($("#f-option2").is(":checked")) {
 				$("#register-password").attr("type", "text");
-			else 
+				$("#confirm-password").attr("type", "text");
+			}
+			else {
 				$("#register-password").attr("type", "password");
+				$("#confirm-password").attr("type", "password");
+			}
+				
 		});
 	});
 </script>
