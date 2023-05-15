@@ -4,7 +4,6 @@ namespace MVC_Project.Areas.Admin.models
 {
     public class Account_Create_VM
     {
-        public string Id { get; set; }
         [Display(Name = "Tên đăng nhập"), Required(ErrorMessage = "Vui lòng nhập tên đăng nhập")]
         public string UserName { get; set; }
         [Display(Name = "Mật khẩu"), Required(ErrorMessage = "Vui lòng nhập mật khẩu")]

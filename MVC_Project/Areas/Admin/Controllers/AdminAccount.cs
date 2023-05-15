@@ -1,10 +1,17 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Entity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVC_Project.Areas.Admin.models;
+using MVC_Project.Helper;
+using Services;
+using Services.Implementation;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 namespace MVC_Project.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -126,6 +133,62 @@ namespace MVC_Project.Areas.Admin.Controllers
                 await _userManager.UpdateSecurityStampAsync(user);
                 _notifyService.Success("Cập nhật tài khoản thành công");
                 return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            var model = new Account_Create_VM();
+            var roleList = await _roleManager.Roles.ToListAsync();
+            ViewData["RoleList"] = new SelectList(roleList, "Name", "Name");
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Account_Create_VM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var findUserName = await _userManager.FindByNameAsync(model.UserName);
+                if(findUserName != null)
+                {
+                    if(model.UserName == findUserName.UserName)
+                    {
+                        _notifyService.Error("Tên tài khoản đã có người sử dụng!");
+                        var roleList = await _roleManager.Roles.ToListAsync();
+                        ViewData["RoleList"] = new SelectList(roleList, "Name", "Name");
+                        return View(model);
+                    }             
+                }
+                var user = new IdentityUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    var newUser = await _userManager.FindByEmailAsync(model.Email);
+                    await _userManager.AddToRoleAsync(newUser, model.RoleName);
+                    _notifyService.Success("Create account successfully");
+                    return RedirectToAction("Index", "AdminAccount");
+                }
+                else
+                {
+
+                    foreach (var error in result.Errors)
+                    {
+                        _notifyService.Error(error.Code);
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    var roleList = await _roleManager.Roles.ToListAsync();
+                    ViewData["RoleList"] = new SelectList(roleList, "Name", "Name");
+                    return View(model);
+                }
             }
             return RedirectToAction("Index");
         }

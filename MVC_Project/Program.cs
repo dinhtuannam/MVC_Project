@@ -33,6 +33,7 @@ builder.Services.AddScoped<IDiscounts, DiscountsService>();
 builder.Services.AddScoped<IOrders, OrdersService>();
 builder.Services.AddScoped<IBanners, BannerService>();
 builder.Services.AddScoped<IAuth, AuthService>();
+builder.Services.AddScoped<IStatics, StaticsService>();
 builder.Services.AddSession();
 // End add serivces to the container
 

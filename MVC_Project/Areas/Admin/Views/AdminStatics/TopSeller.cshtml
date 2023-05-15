@@ -1,0 +1,119 @@
+﻿@model IEnumerable<Entity.DetailOrder>
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Danh sách sản phẩm</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a asp-area="Admin"
+                   asp-controller="Home"
+                   asp-action="Index"
+                   class="breadcrumb-item">
+                    <i class="anticon anticon-home m-r-5"></i>
+                    Home
+                </a>
+                <span class="breadcrumb-item active">Danh sách sản phẩm bán chạy</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row m-b-30">
+                <div class="col-lg-8">
+                    <div class="d-md-flex">
+                        <div class="m-b-10 m-r-15">
+                            <select required
+                                    asp-route-CatID="@ViewBag.CurrentCatID"
+                                    class="custom-select"
+                                    style="min-width: 220px;"
+                                    id="txtCatID" name="txtCatID">
+                                <option value="best_seller" selected="@(ViewBag.filterSelected == "best_seller" ? "selected" : null)">
+                                    Sản phẩm bán chạy nhất
+                                </option>
+                                <option value="low_seller" selected="@(ViewBag.filterSelected == "low_seller" ? "selected" : null)">
+                                    Sản phẩm bán ít nhất
+                                </option>
+                                <option value="highest_total" selected="@(ViewBag.filterSelected == "highest_total" ? "selected" : null)">
+                                    Tổng thu cao nhất
+                                </option>
+                                <option value="lowest_total" selected="@(ViewBag.filterSelected == "lowest_total" ? "selected" : null)">
+                                    Tổng thu thấp nhất
+                                </option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover e-commerce-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Hình ảnh</th>
+                            <th>Tên</th>
+                            <th>Số lượng</th>
+                            <th>Đơn giá</th>
+                            <th>Tổng thu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.ProductId</td>
+                                    <td>
+                                        <img class="img-fluid rounded"
+                                             src="~/image/Sneaker/@item.Product.Image"
+                                             style="max-width: 60px"
+                                             alt="" />
+                                    </td>
+                                    <td>
+                                        <h6 class="m-b-0 m-l-10">@item.Product.Name</h6>
+                                    </td>
+                                    <td>@item.Quantity</td>
+                                    <td>$@item.Product.Price</td>
+                                    <td>$@item.Total</td>
+                                   
+                                    
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div aria-label="Page navigation example">
+                    <ul class="pagination">
+                        @*<pager class="pager-container"
+                               list="@Model"
+                               asp-area="Admin"
+                               asp-controller="AdminProduct"
+                               asp-action="Index" />*@
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        // ============================================ Lọc sản phẩm =========================================
+        $(document).ready(function () {
+            jQuery("#txtCatID").change(function () {
+                var catID = jQuery(this).children(":selected").attr("value");
+                console.log(catID)
+                
+                $("#txtCatID option").removeAttr('selected');
+                $("#txtCatID > [value=" + catID + "]").attr("selected", "true");
+
+                window.location.href = "/Admin/AdminStatics/TopSeller?filter="+catID;
+            })
+        })
+    </script>
+}
