@@ -57,7 +57,7 @@ namespace Services.Implementation
 
         public IEnumerable<Product> FilterProduct(int CatID, string Price, string Sort,string search)
 		{
-			var products = _context.Products.AsQueryable();
+			var products = _context.Products.AsQueryable().Where(p => p.Status != Entity.Enums.ProductStatus.Deleted);
             if (CatID != 0)
             {
                 products = products.Where(p => p.CategoryID == CatID);

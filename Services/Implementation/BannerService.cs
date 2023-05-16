@@ -43,9 +43,10 @@ namespace Services.Implementation
             return _context.Banners.FirstOrDefault(m => m.Id == id);
         }
 
-        public Task UpdateAsSync(Banner banner)
+        public async Task UpdateAsSync(Banner banner)
         {
-            throw new NotImplementedException();
+            _context.Banners.Update(banner);
+            await _context.SaveChangesAsync();
         }
     }
 }

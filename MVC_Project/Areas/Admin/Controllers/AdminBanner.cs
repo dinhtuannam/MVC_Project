@@ -87,17 +87,39 @@ namespace MVC_Project.Areas.Admin.Controllers
             var model = _bannerService.GetById(id);
             if (model == null)
                 return NotFound();
-            return View(model);
+            var banner = new Banner_Update_VM
+            {
+                Id = model.Id,
+                Title = model.Title,
+                Description = model.Description
+            };
+            return View(banner);
         }
 
         // POST: AdminBanner/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(Banner_Update_VM model)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var banner = _bannerService.GetById(model.Id);  
+                if (banner == null)
+                {
+                    return NotFound();
+                }
+                banner.Description = model.Description;
+                banner.Title = model.Title;
+                
+
+                if (model.BannerImage != null && model.BannerImage.Length > 0)
+                {
+                    var helper = new ConvertImgToString(_webHostEnvironment);
+                    banner.BannerImage = helper.ConvertImg(model.BannerImage, "Banner").Result;
+                }
+                await _bannerService.UpdateAsSync(banner);
+                _notifyService.Success("Cập nhật banner thành công!");
+                return RedirectToAction("Index");
             }
             catch
             {

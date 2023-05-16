@@ -13,7 +13,8 @@ namespace MVC_Project.Areas.Admin.models
         public string Description { get; set; }
         [Display(Name = "Mô tả ngắn"), Required(ErrorMessage = "Vui lòng nhập mô tả ngắn sản phẩm")]
         public string ShortDescription { get; set; }
-        [Display(Name = "Hình ảnh"), Required(ErrorMessage = "Vui lòng chọn hình ảnh")]
+        [Display(Name = "Hình ảnh")]
+        [Required(AllowEmptyStrings = true)]
         public IFormFile Image { get; set; }
         [Display(Name = "Số lượng"), Required(ErrorMessage = "Vui lòng nhập số lượng")]
         public int Quantity { get; set; }

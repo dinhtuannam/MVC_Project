@@ -233,11 +233,10 @@ namespace MVC_Project.Areas.Admin.Controllers
             {
                 var helper = new ConvertImgToString(_webHostEnvironment);
                 product.Image = helper.ConvertImg(model.Image,"Sneaker").Result;            
-                await _productService.UpdateAsSync(product);
-                _notifyService.Success("Cập nhật sản phẩm thành công!");
-                return RedirectToAction("Index");
             }
-            return View();
+            await _productService.UpdateAsSync(product);
+            _notifyService.Success("Cập nhật sản phẩm thành công!");
+            return RedirectToAction("Index");
         }
     }
 }
