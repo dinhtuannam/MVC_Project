@@ -1,8 +1,9 @@
-﻿@model IEnumerable<Entity.DetailOrder>
+﻿@model Account_VM
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
 
@@ -42,41 +43,40 @@
         <div class="container">
             <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
                 <div class="col-first">
-                    <h1>Detail Order</h1>
+                    <h1>Setting</h1>
                     <nav class="d-flex align-items-center">
                         <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-                        <a href="category.html">Detail Order</a>
+                        <a href="category.html">Setting</a>
                     </nav>
                 </div>
             </div>
         </div>
     </section>
 
-    <div style="min-height:100vh;max-width:1400px;margin:0 auto; padding:40px 20px">
-        <table style="width:100%;text-align:center">
-            <tr style="font-size:20px;color:#000 !important;letter-spacing:3px; ">
-                <th style="width:300px">IMAGE</th
-                <th></th>
-                <th style="width:600px">TITLE</th>
-                <th>QUANTITY</th>
-                <th>PRICE</th>
-                <th>TOTAL</th>
-            </tr>   
-            @foreach (var item in Model)
-            {
-                <tr style="font-size:18px">
-                    <td > 
-                        <img src="~/image/Sneaker/@item.Product.Image" alt="" style="margin:20px 0px;max-width:250px;"/>
-                    </td>
-                    <td>@item.Product.Name</td>
-                    <td>@item.Quantity</td>
-                    <td>@item.PricePerProduct</td>
-                    <td>$@item.Total</td>
-                </tr>
-                
-            }
-        </table>
-    </div>
+    <form method="post" asp-action="Update" id="setting-form-1">
+        <div style="margin:100px auto;max-width:360px">
+            <h2 style="text-align:center;margin-bottom:24px">SETTING ACCOUNT</h2>
+            <input asp-for="@Model.Id" type="hidden" />
+            <div class="setting-input-container">
+                <span class="setting-span-input">Username :</span>
+                <input asp-for="@Model.Username" class="setting-input" />
+            </div>
+            <div class="setting-input-container">
+                <span class="setting-span-input">Phone :</span>
+                <input asp-for="@Model.Phone" class="setting-input" />
+            </div>
+            <div class="setting-input-container">
+                <span class="setting-span-input">Email :</span>
+                <input asp-for="@Model.Email" class="setting-input" />
+            </div>
+            <div style="text-align:center; margin: 20px 8px;">
+                <input class="setting-submit-btn" value="UPDATE" type="submit" />
+            </div>
+            <div style="text-align:center">
+                <a asp-action="ChangePassword" style="color:#000; font-size:20px; cursor:pointer">>> Change Password <<</a>
+            </div>
+        </div>
+    </form>
 
 
     <script src="js/vendor/jquery-2.2.4.min.js"></script>
@@ -98,4 +98,3 @@
 </body>
 
 </html>
-

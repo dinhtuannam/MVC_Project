@@ -1,11 +1,8 @@
-﻿using Entity.Enums;
-using Entity;
-
-namespace MVC_Project.Models
+﻿namespace MVC_Project.Models
 {
-    public class Account_VM
+    public class Account_Update_VM
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }

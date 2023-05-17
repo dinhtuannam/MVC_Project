@@ -54,7 +54,7 @@
 	</section>
 	<!-- End Banner Area -->
 	<!--================Login Box Area =================-->
-	<section class="login_box_area section_gap">
+	<section class="login_box_area section_gap" id="register-form">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6">
@@ -177,4 +177,8 @@
 				
 		});
 	});
+	var scrollToElement = document.getElementById("register-form");
+	setTimeout(function () {
+		scrollToElement.scrollIntoView();
+	}, 0);
 </script>

@@ -51,6 +51,7 @@
 			</div>
 		</div>
 	</section>
+	<div id="login-form"></div>
 	<!-- End Banner Area -->
 	<!--================Login Box Area =================-->
 	<section class="login_box_area section_gap">
@@ -132,6 +133,7 @@
 </html>
 
 <script>
+	var scrollToElement = document.getElementById("login-form");
 	$(document).ready(function () {
 		$("#f-option2").click(function () {
 			if ($("#f-option2").is(":checked"))
@@ -140,4 +142,7 @@
 				$("#login-password").attr("type", "password");
 		});
 	});
+	setTimeout(function () {
+		scrollToElement.scrollIntoView();
+	}, 0);
 </script>

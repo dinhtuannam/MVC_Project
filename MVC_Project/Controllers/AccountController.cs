@@ -42,8 +42,8 @@ namespace MVC_Project.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(Account_Create_VM model)
         {
-            /*if (ModelState.IsValid)
-            {*/
+            if (ModelState.IsValid)
+            {
                 var user = new IdentityUser
                 {
                     UserName = model.Username,
@@ -64,11 +64,11 @@ namespace MVC_Project.Controllers
 
                     foreach (var error in result.Errors)
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
+						_notifyService.Error(error.Description);
+						ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
-
-            /*}*/
+            }
             return View(model);
         }
 
@@ -105,9 +105,15 @@ namespace MVC_Project.Controllers
                     }
                    
                 }
+                else
+                {
+					_notifyService.Error("Invalid username or password");
+                    return View(model);
+				}
 
             }
-            return View(model);
+			_notifyService.Error("Username or password cannot be required");
+			return View(model);
         }
 
         [HttpGet]

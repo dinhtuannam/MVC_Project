@@ -64,6 +64,14 @@ namespace MVC_Project.Controllers
 			if (item == null)
 			{
 				var product = _productService.GetById(id);
+				if(product.Quantity <= 0)
+				{
+					_notifyService.Information("Product is sold out ! please choose another one");
+					return Json(new
+					{
+						status = "fail",
+					});
+				}
 				cart_item = new Cart_item
 				{
 					ProductId = id,
